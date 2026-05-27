@@ -1,0 +1,1865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marjolaine Bénabès · Key Projects</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:  #25314d; --dteal: #104055; --teal: #077a7d;
+    --mint:  #7ae2cf; --white: #ffffff; --cream: #f4faf9;
+    --grey:  #8a9bb0; --lgrey: #e4eceb;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: "DM Sans", sans-serif; background: var(--cream); color: var(--navy); overflow-x: hidden; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 48px; height: 60px;
+    background: rgba(37,49,77,0.97); backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(122,226,207,0.15);
+  }
+  .nav-logo { font-family: "DM Serif Display", serif; font-size: 17px; color: var(--white); }
+  .nav-logo span { color: var(--mint); }
+  .nav-sub { font-family: "DM Mono", monospace; font-size: 10px; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; margin-top: 2px; }
+
+
+
+  /* ── HERO STRIP ── */
+  .hero-strip {
+    background: var(--navy); padding: 100px 0 56px;
+    position: relative; overflow: hidden;
+    border-bottom: 1px solid rgba(122,226,207,0.12);
+  }
+  .hero-strip::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 80% at 80% 50%, rgba(7,122,125,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  #hero-map-canvas {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    opacity: 0.13; pointer-events: none; z-index: 0;
+  }
+  .hero-strip .container { position: relative; z-index: 2; }
+  .container { max-width: 1060px; margin: 0 auto; padding: 0 48px; }
+  .hero-eyebrow {
+    font-family: "DM Mono", monospace; font-size: 10px; font-weight: 500;
+    color: var(--mint); letter-spacing: 0.2em; text-transform: uppercase;
+    margin-bottom: 14px; opacity: 0; animation: fadeUp 0.6s 0.1s forwards;
+  }
+  .hero-name {
+    font-family: "DM Serif Display", serif; font-size: clamp(34px, 4vw, 52px);
+    line-height: 1.05; color: var(--white); margin-bottom: 6px;
+    opacity: 0; animation: fadeUp 0.6s 0.25s forwards;
+  }
+  .hero-name em { color: var(--mint); font-style: normal; }
+  .hero-underline {
+    display: block; height: 3px; width: 0;
+    background: linear-gradient(90deg, var(--teal), var(--mint));
+    border-radius: 2px; margin-bottom: 18px;
+    transition: width 1.2s ease 0.8s;
+  }
+  .hero-underline.animate { width: 200px; }
+  .hero-desc {
+    font-size: 14px; font-weight: 300; color: rgba(255,255,255,0.72);
+    max-width: 580px; line-height: 1.8; margin-bottom: 28px;
+    opacity: 0; animation: fadeUp 0.6s 0.4s forwards;
+  }
+  .hero-desc strong { color: var(--mint); font-weight: 600; }
+  .hero-tags {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    opacity: 0; animation: fadeUp 0.6s 0.55s forwards;
+  }
+  .htag {
+    padding: 5px 13px; border-radius: 20px; font-size: 11.5px; font-weight: 500;
+    letter-spacing: 0.03em; border: 1px solid rgba(122,226,207,0.3);
+    color: var(--mint); background: rgba(122,226,207,0.07);
+  }
+
+  /* ── SECTION ── */
+  .projects-section { padding: 72px 0 96px; }
+  .section-label {
+    font-family: "DM Mono", monospace; font-size: 10px; font-weight: 500;
+    color: var(--teal); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .section-title {
+    font-family: "DM Serif Display", serif; font-size: clamp(26px, 3vw, 36px);
+    color: var(--navy); line-height: 1.15; margin-bottom: 48px;
+  }
+  .section-title span { color: var(--teal); }
+
+  /* ── PROJECT GRID ── */
+  .proj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+
+  .proj-card {
+    background: var(--white); border-radius: 14px;
+    border: 1px solid rgba(37,49,77,0.1); overflow: hidden;
+    cursor: pointer; transition: all 0.3s;
+    box-shadow: 0 2px 12px rgba(37,49,77,0.06);
+    display: flex; flex-direction: column;
+    opacity: 0; transform: translateY(20px);
+  }
+  .proj-card.visible { opacity: 1; transform: none; }
+  .proj-card:hover { transform: translateY(-5px); box-shadow: 0 14px 36px rgba(37,49,77,0.14); border-color: rgba(7,122,125,0.5); cursor:pointer; } .proj-card:hover .proj-cta { color: var(--mint); }
+
+  .proj-header { padding: 22px 24px 18px; position: relative; flex: 1; }
+  .proj-header::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; }
+  .proj-header.tech::before   { background: linear-gradient(90deg, var(--dteal), var(--mint)); }
+  .proj-header.lean::before   { background: linear-gradient(90deg, var(--teal), var(--mint)); }
+  .proj-header.web::before    { background: linear-gradient(90deg, var(--navy), var(--teal)); }
+  .proj-header.cross::before  { background: linear-gradient(90deg, var(--teal), var(--mint)); }
+
+  .proj-eyebrow {
+    font-family: "DM Mono", monospace; font-size: 10px; font-weight: 500;
+    letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .proj-header.tech .proj-eyebrow   { color: var(--dteal); }
+  .proj-header.lean .proj-eyebrow   { color: var(--teal); }
+  .proj-header.web .proj-eyebrow    { color: var(--navy); }
+  .proj-header.cross .proj-eyebrow  { color: var(--teal); }
+
+  .proj-title {
+    font-family: "DM Serif Display", serif; font-size: 17px;
+    color: var(--navy); line-height: 1.3; margin-bottom: 8px;
+  }
+  .proj-icon {
+    width: 38px; height: 38px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 10px;
+  }
+  .proj-sub { font-size: 12.5px; color: var(--grey); line-height: 1.6; margin-bottom: 12px; }
+  .proj-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+  .proj-tag {
+    font-size: 11px; padding: 3px 10px; border-radius: 20px;
+    background: rgba(7,122,125,0.08); color: var(--teal);
+    border: 1px solid rgba(7,122,125,0.2);
+  }
+  .proj-cta {
+    display: block; background: var(--teal); color: #fff;
+    border-radius: 8px; padding: 9px; font-size: 13px; font-weight: 500;
+    text-align: center; margin-top: 6px;
+  }
+
+  .proj-metrics {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: rgba(37,49,77,0.08);
+  }
+  .proj-metric { background: var(--cream); padding: 14px 10px; text-align: center; }
+  .proj-metric-val {
+    font-family: "DM Serif Display", serif; font-size: 20px;
+    font-weight: 700; color: var(--teal);
+  }
+  .proj-metric-label { font-size: 10px; color: var(--grey); margin-top: 3px; line-height: 1.4; }
+
+  /* ── MOBILE CARD ENHANCEMENTS ── */
+  @media (max-width: 560px) {
+    .proj-grid { gap: 14px; }
+    .proj-header { padding: 18px 18px 14px; }
+    .proj-eyebrow { font-size: 9px; margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .proj-title { font-size: 15px; margin-bottom: 6px; }
+    .proj-sub { display: none; } /* hidden on small screens — visible inside modal */
+    .proj-tags { gap: 4px; margin-bottom: 10px; }
+    .proj-tag { font-size: 10px; padding: 2px 8px; }
+    .proj-cta {
+      display: block; width: 100%; text-align: center;
+      background: var(--teal); color: #fff; padding: 10px;
+      border-radius: 8px; font-size: 13px; margin-top: 4px;
+    }
+    .proj-metric { padding: 12px 6px; }
+    .proj-metric-val { font-size: 16px; }
+    .proj-metric-label { font-size: 9px; }
+  }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 999;
+    background: rgba(10,16,30,0.85); overflow-y: auto; padding: 40px 20px;
+  }
+  .modal-inner {
+    max-width: 860px; margin: 0 auto; background: var(--white);
+    border-radius: 16px; overflow: hidden; position: relative;
+  }
+  .modal-head { padding: 32px 36px 26px; position: relative; }
+  .modal-close {
+    position: absolute; top: 20px; right: 20px; width: 34px; height: 34px;
+    border-radius: 50%; background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2); color: #fff;
+    font-size: 16px; cursor: pointer; display: flex; align-items: center;
+    justify-content: center; transition: all 0.2s;
+  }
+  .modal-close:hover { background: rgba(122,226,207,0.2); }
+  .modal-eyebrow {
+    font-family: "DM Mono", monospace; font-size: 11px; font-weight: 500;
+    letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .modal-title {
+    font-family: "DM Serif Display", serif; font-size: 21px;
+    color: #fff; line-height: 1.2; margin-bottom: 6px;
+  }
+  .modal-subtitle { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 18px; }
+  .modal-badges { display: flex; flex-wrap: wrap; gap: 8px; }
+  .mbadge {
+    font-size: 11px; padding: 4px 12px; border-radius: 20px;
+    border: 1px solid; background: rgba(122,226,207,0.08);
+  }
+
+  .modal-body { padding: 28px 36px; display: flex; flex-direction: column; gap: 18px; }
+  .mblock { background: var(--cream); border-radius: 10px; padding: 18px 20px; }
+  .mblock-title {
+    font-size: 11px; font-weight: 700; color: var(--navy);
+    text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .mblock-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .mblock-text { font-size: 13px; color: #4a5f78; line-height: 1.75; }
+  .mblock-text strong { color: var(--teal); font-weight: 600; }
+
+  .m-steps { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .m-step { display: flex; align-items: flex-start; gap: 10px; }
+  .m-step-num {
+    width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0;
+    color: var(--mint); font-size: 10px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; margin-top: 1px;
+  }
+  .m-step-text { font-size: 12px; color: #4a5f78; line-height: 1.55; }
+  .m-step-text strong { color: var(--navy); font-weight: 600; }
+
+  .m-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .m-metric {
+    border-radius: 10px; padding: 16px; text-align: center;
+    border: 1px solid rgba(7,122,125,0.2);
+    background: linear-gradient(135deg, #f0fdfb, #fff);
+  }
+  .m-metric-val {
+    font-family: "DM Serif Display", serif; font-size: 26px;
+    color: var(--teal); font-weight: 700;
+  }
+  .m-metric-label { font-size: 11px; color: var(--grey); margin-top: 3px; line-height: 1.4; }
+
+  .m-insight {
+    background: linear-gradient(135deg, var(--navy), var(--dteal));
+    border-radius: 10px; padding: 20px 24px;
+    border-left: 3px solid var(--mint);
+    transition: transform 0.15s, box-shadow 0.2s, border-color 0.2s;
+    cursor: default;
+  }
+  .m-insight:hover {
+    transform: translateX(3px);
+    box-shadow: 0 2px 10px rgba(7,122,125,0.18);
+    border-color: var(--teal);
+  }
+  .m-insight-label {
+    font-family: "DM Mono", monospace; font-size: 10px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--mint); margin-bottom: 8px;
+  }
+  .m-insight-text { font-size: 13.5px; color: rgba(255,255,255,0.9); line-height: 1.75; }
+
+  .m-risk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .m-risk-item { background: var(--white); border-radius: 8px; padding: 12px 14px; border-left: 3px solid;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s; cursor: default; }
+  .m-risk-item:hover { background: #e8f9f7; transform: translateX(3px); box-shadow: 0 2px 10px rgba(7,122,125,0.12); }
+  .m-risk-item:hover .m-risk-head { color: var(--teal) !important; }
+  .m-risk-head { font-size: 11.5px; font-weight: 700; margin-bottom: 6px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; user-select:none; }
+  .m-risk-head::after { content:'﹢'; font-size:14px; font-weight:400; color:var(--teal); opacity:0.7; transition:transform .2s; flex-shrink:0; margin-left:6px; }
+  .m-risk-item.open .m-risk-head::after { content:'－'; }
+  .m-risk-body { font-size: 12px; color: var(--grey); line-height: 1.65; display:none; }
+  .m-risk-item.open .m-risk-body { display:block; animation:fadeIn .18s ease; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(-4px)} to{opacity:1;transform:none} }
+
+  /* footer strip */
+  .footer-strip {
+    background: var(--navy); padding: 36px 48px;
+    border-top: 1px solid rgba(122,226,207,0.15);
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 24px;
+  }
+  .footer-brand { font-family: "DM Serif Display", serif; font-size: 18px; color: var(--white); flex-shrink: 0; }
+  .footer-brand span { color: var(--mint); }
+  .footer-contacts { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+  .footer-contact-row { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+  .footer-contact-item {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 13px; font-weight: 500; color: var(--white);
+    text-decoration: none; transition: color 0.2s;
+  }
+  .footer-contact-item:hover { color: var(--mint); }
+  .footer-contact-icon {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: rgba(122,226,207,0.12); border: 1px solid rgba(122,226,207,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; flex-shrink: 0; transition: all 0.2s;
+  }
+  .footer-contact-item:hover .footer-contact-icon { background: rgba(122,226,207,0.25); border-color: var(--mint); }
+  .footer-location { font-size: 11.5px; color: rgba(255,255,255,0.35); letter-spacing: 0.04em; }
+
+  /* ── HERO CTA BUTTONS ── */
+  .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 32px; opacity: 0; animation: fadeUp 0.6s 0.7s forwards; }
+  .btn-primary {
+    padding: 13px 26px; border-radius: 6px; background: var(--teal);
+    color: var(--white); font-size: 13.5px; font-weight: 600;
+    text-decoration: none; border: none; cursor: pointer;
+    transition: all 0.2s; display: inline-flex; align-items: center; gap: 7px;
+  }
+  .btn-primary:hover { background: var(--mint); color: var(--navy); transform: translateY(-2px); }
+  .btn-outline {
+    padding: 13px 26px; border-radius: 6px;
+    border: 1.5px solid rgba(122,226,207,0.45); color: var(--mint);
+    font-size: 13.5px; font-weight: 500; text-decoration: none;
+    transition: all 0.2s; display: inline-flex; align-items: center; gap: 7px;
+  }
+  .btn-outline:hover { border-color: var(--mint); background: rgba(122,226,207,0.08); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:none; } }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 760px) {
+    nav { padding: 0 20px; }
+    .container { padding: 0 20px; }
+    .proj-grid { grid-template-columns: 1fr; gap: 16px; }
+    .proj-title { font-size: 16px; }
+    .proj-cta {
+      display: block; width: 100%; text-align: center;
+      background: var(--teal); color: #fff; padding: 10px;
+      border-radius: 8px; font-size: 13px; margin-top: 6px;
+    }
+    .m-steps, .m-risk-grid, .m-metrics { grid-template-columns: 1fr; }
+    .modal-body { padding: 20px 20px; }
+    .modal-head { padding: 24px 20px; }
+    .footer-strip { flex-direction: column; gap: 16px; text-align: center; padding: 24px 20px; }
+  .footer-contacts { align-items: center; }
+  .footer-contact-row { justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div>
+    <div class="nav-logo">M<span>.</span>Bénabès <span style="font-size:11px; color:rgba(255,255,255,0.3); font-family:'DM Sans',sans-serif; font-weight:300;">(Jo)</span></div>
+    <div class="nav-sub">Key Projects</div>
+  </div>
+</nav>
+
+<!-- HERO STRIP -->
+<div class="hero-strip">
+  <canvas id="hero-map-canvas"></canvas>
+  <div class="container">
+    <p class="hero-eyebrow">Operations Specialist &amp; Process Improvement</p>
+    <h1 class="hero-name">Marjolaine <em>Bénabès</em></h1>
+    <span class="hero-underline" id="hero-underline"></span>
+    <p class="hero-desc">I am an insurance operations professional with <strong>10+ years of experience</strong> in IPMI, client journey optimization, process improvement, and automation. I help insurance businesses <strong>simplify</strong> workflows, <strong>reduce</strong> manual input, and <strong>build</strong> operating models that deliver better quality, consistency, and client satisfaction.<br><br>This portfolio presents selected examples of process mapping, requirements analysis, automation implementation, and measurable operational change.</p>
+    <div class="hero-tags">
+      <span class="htag">IPMI Operations</span>
+      <span class="htag">Lean Process Improvement</span>
+      <span class="htag">TPA / Portfolio Management</span>
+      <span class="htag">Automation / EDM / CRM</span>
+      <span class="htag">Cross-Border Coordination</span>
+    </div>
+    <div class="hero-cta">
+      <a href="#projects" class="btn-primary">View Projects</a>
+      <a href="https://www.linkedin.com/in/marjolaine-benabes" target="_blank" rel="noopener" class="btn-outline">Contact Me</a>
+    </div>
+  </div>
+</div>
+
+<!-- PROJECTS -->
+<section class="projects-section" id="projects">
+  <div class="container">
+    <p class="section-label">Behind the numbers</p>
+    <h2 class="section-title">Key <span>projects</span></span></h2>
+
+    <div class="proj-grid">
+
+      <!-- PROJECT 1 -->
+      <div class="proj-card" id="pcard-1" onclick="openModal('m1')">
+        <div class="proj-header tech">
+          <div class="proj-icon" style="background:rgba(16,64,85,0.08);border:1px solid rgba(16,64,85,0.18);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#104055" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12h6M9 16h6M9 8h3"/><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg>
+          </div>
+          <div class="proj-eyebrow">Process Automation – Risk Reduction – Provider Network</div>
+          <div class="proj-title">Turning invoice management into a GED-driven operating model</div>
+          <div class="proj-sub">The project built a bridge between providers, students, and the insurer to automate invoice handling, improve traceability, and establish a sustainable operating model through a structured provider network.</div>
+          <div class="proj-tags">
+            <span class="proj-tag">DMAIC</span>
+            <span class="proj-tag">GED / EDM</span>
+            <span class="proj-tag">TPA Model</span>
+          </div>
+          <div class="proj-cta">View project →</div>
+        </div>
+        <div class="proj-metrics">
+          <div class="proj-metric"><div class="proj-metric-val">≈ 0</div><div class="proj-metric-label">Invoices on campus</div></div>
+          <div class="proj-metric"><div class="proj-metric-val">↑</div><div class="proj-metric-label">Contract renewed + market differentiator</div></div>
+          <div class="proj-metric"><div class="proj-metric-val">✓</div><div class="proj-metric-label">GED implementation</div></div>
+        </div>
+      </div>
+
+      <!-- PROJECT 2 -->
+      <div class="proj-card" id="pcard-2" onclick="openModal('m2')">
+        <div class="proj-header lean">
+          <div class="proj-icon" style="background:rgba(7,122,125,0.08);border:1px solid rgba(7,122,125,0.2);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#077a7d" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v6c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 11v6c0 1.66 4.03 3 9 3s9-1.34 9-3v-6"/></svg>
+          </div>
+          <div class="proj-eyebrow">Data Architecture – Mapping – Automation</div>
+          <div class="proj-title">Provider network upload standardization</div>
+          <div class="proj-sub">Developed a data architecture and upload framework for provider network management, including mapping, transformation, governance, and validation across backend systems and the member app.</div>
+          <div class="proj-tags">
+            <span class="proj-tag">Data Mapping</span>
+            <span class="proj-tag">Data Governance</span>
+            <span class="proj-tag">TPA Network Integration</span>
+            <span class="proj-tag">Patient Steering</span>
+          </div>
+          <div class="proj-cta">View project →</div>
+        </div>
+        <div class="proj-metrics">
+          <div class="proj-metric"><div class="proj-metric-val">5,000+</div><div class="proj-metric-label">Providers integrated</div></div>
+          <div class="proj-metric"><div class="proj-metric-val">✓</div><div class="proj-metric-label">VIP tender supported</div></div>
+          <div class="proj-metric"><div class="proj-metric-val">∞</div><div class="proj-metric-label">Repeatable framework for future uploads</div></div>
+        </div>
+      </div>
+
+      <!-- PROJECT 3 -->
+      <div class="proj-card" id="pcard-3" onclick="openModal('m3')">
+        <div class="proj-header web">
+          <div class="proj-icon" style="background:rgba(37,49,77,0.07);border:1px solid rgba(37,49,77,0.15);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#25314d" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          </div>
+          <div class="proj-eyebrow">Digital Transformation · Customer Journey Design · Automation</div>
+          <div class="proj-title">Website implementation &amp; 100% digital customer journey</div>
+          <div class="proj-sub">For a tailored school solution, our team took over the full contract lifecycle and replaced paper-based student applications with a fully digital membership journey, improving user experience within a short delivery window before campus arrival.</div>
+          <div class="proj-tags">
+            <span class="proj-tag">Requirements Translation</span>
+            <span class="proj-tag">Data Mapping</span>
+            <span class="proj-tag">Transmission Rules</span>
+            <span class="proj-tag">UAT</span>
+          </div>
+          <div class="proj-cta">View project →</div>
+        </div>
+        <div class="proj-metrics">
+          <div class="proj-metric"><div class="proj-metric-val">0</div><div class="proj-metric-label">Paper forms remaining</div></div>
+          <div class="proj-metric"><div class="proj-metric-val">100%</div><div class="proj-metric-label">Membership automated</div></div>
+          <div class="proj-metric">
+            <div class="proj-metric-val" style="display:flex;align-items:center;justify-content:center;">
+              <svg viewBox="0 0 60 36" width="52" height="32" xmlns="http://www.w3.org/2000/svg" style="display:block;">
+                <text x="2" y="28" font-family="DM Serif Display,Georgia,serif" font-size="30" font-weight="700" fill="var(--teal)">6</text>
+                <text x="30" y="26" font-family="DM Serif Display,Georgia,serif" font-size="26" font-style="italic" fill="var(--dteal)">σ</text>
+              </svg>
+            </div>
+            <div class="proj-metric-label">Operational excellence</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROJECT 4 -->
+      <div class="proj-card" id="pcard-4" onclick="openModal('m4')">
+        <div class="proj-header lean">
+          <div class="proj-icon" style="background:rgba(7,122,125,0.08);border:1px solid rgba(7,122,125,0.2);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#077a7d" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </div>
+          <div class="proj-eyebrow">Cross-Functional – Process Mapping – US Market – Operational Alignment</div>
+          <div class="proj-title">Project Simply America — US Corridor Operational Model</div>
+          <div class="proj-sub">Led a cross-functional project across Paris, Mexico, and the US TPA to improve workflows, standardize case management, and support cost containment in the portfolio's most complex market.</div>
+          <div class="proj-tags">
+            <span class="proj-tag">Cross-functional Leadership</span>
+            <span class="proj-tag">Process Mapping</span>
+            <span class="proj-tag">US TPA Management</span>
+            <span class="proj-tag">Case Management</span>
+            <span class="proj-tag">High-Cost Claims Governance</span>
+          </div>
+          <div class="proj-cta">View project →</div>
+        </div>
+        <div class="proj-metrics">
+          <div class="proj-metric"><div class="proj-metric-val">2 yrs</div><div class="proj-metric-label">Cross-functional initiative 2022–2024</div></div>
+          <div class="proj-metric"><div class="proj-metric-val">3</div><div class="proj-metric-label">Teams aligned: Paris, Mexico, US TPA</div></div>
+          <div class="proj-metric"><div class="proj-metric-val">↑</div><div class="proj-metric-label">Coordination, governance &amp; care navigation improved</div></div>
+        </div>
+      </div>
+
+    </div><!-- /proj-grid -->
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     MODAL 1: GED Implementation & DMAIC
+═══════════════════════════════════════════════════ -->
+<style>
+  /* Workflow diagram styles */
+  .wf-tabs { display:flex; gap:0; margin-bottom:0; border-radius:8px 8px 0 0; overflow:hidden; }
+  .wf-tab {
+    flex:1; padding:10px 14px; font-family:"DM Mono",monospace; font-size:10px;
+    font-weight:500; letter-spacing:0.1em; text-transform:uppercase; text-align:center;
+    cursor:pointer; border:none; transition:all 0.2s;
+  }
+  .wf-tab.as-is { background:#3d4e63; color:#b0c4d8; }
+  .wf-tab.to-be { background:#0d2b2b; color:#7ae2cf; }
+  .wf-tab.active.as-is { background:#25314d; color:#fff; }
+  .wf-tab.active.to-be { background:#104055; color:#b4f0e4; }
+  .wf-diagram { display:none; background:var(--cream); border-radius:0 0 8px 8px; padding:16px 12px; overflow-x:auto; }
+  .wf-diagram.active { display:block; }
+  .wf-svg { width:100%; min-width:520px; }
+
+  /* risk grid extended to 4 cols */
+  .m-risk-grid-4 { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .m-risk-body ul { margin:0; padding:0 0 0 14px; }
+  .m-risk-body li { font-size:11.5px; color:var(--grey); line-height:1.6; margin-bottom:2px; }
+
+  /* root cause list */
+  .rc-list { display:flex; flex-direction:column; gap:6px; margin-top:4px; }
+  .rc-item { display:flex; align-items:flex-start; gap:10px; }
+  .rc-pill {
+    flex-shrink:0; font-family:"DM Mono",monospace; font-size:9px; font-weight:700;
+    padding:2px 8px; border-radius:10px; text-transform:uppercase; letter-spacing:0.08em;
+    margin-top:2px;
+  }
+  .rc-pill.high { background:rgba(220,68,68,0.15); color:#d44; border:1px solid rgba(220,68,68,0.3); }
+  .rc-pill.med  { background:rgba(224,123,84,0.12); color:#c06030; border:1px solid rgba(224,123,84,0.3); }
+  .rc-text { font-size:12px; color:#4a5f78; line-height:1.5; }
+
+  /* results list */
+  .res-list { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:4px; }
+  .res-item {
+    background:var(--white); border-radius:8px; padding:10px 13px;
+    border-left:3px solid var(--mint);
+    transition: background 0.2s, border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+    cursor: default;
+  }
+  .res-item:hover {
+    background: #e8f9f7;
+    border-color: var(--teal);
+    transform: translateX(3px);
+    box-shadow: 0 2px 10px rgba(7,122,125,0.12);
+  }
+  .res-item:hover .res-text { color: var(--teal); }
+  .res-icon { width:28px; height:28px; margin-bottom:4px; flex-shrink:0; }
+  .res-text { font-size:12px; color:var(--navy); line-height:1.5; font-weight:500; }
+  .res-sub  { font-size:11px; color:var(--grey); margin-top:2px; line-height:1.4; }
+
+  @media(max-width:760px){
+    .m-risk-grid-4, .res-list { grid-template-columns:1fr; }
+  }
+</style>
+
+<div id="m1" class="modal-overlay" onclick="if(event.target===this)closeModal('m1')">
+  <div class="modal-inner">
+    <div class="modal-head" style="background:linear-gradient(135deg,var(--navy) 0%,#1a2d4a 100%);">
+      <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#5b8db8,var(--mint));"></div>
+      <button class="modal-close" onclick="closeModal('m1')">✕</button>
+      <div style="width:44px;height:44px;border-radius:12px;background:rgba(16,64,85,0.35);border:1px solid rgba(122,226,207,0.3);display:flex;align-items:center;justify-content:center;margin-bottom:12px;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7ae2cf" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12h6M9 16h6M9 8h3"/><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg>
+      </div>
+      <div class="modal-eyebrow" style="color:var(--mint);">Process Automation – Risk Reduction – Provider Network</div>
+      <div class="modal-title">Turning invoice management into a GED-driven operating model</div>
+      <div class="modal-subtitle">Antaé · Montreux · 2016–2019</div>
+      <div class="modal-badges">
+        <span class="mbadge" style="border-color:rgba(91,141,184,0.4);color:var(--mint);background:rgba(91,141,184,0.08);">DMAIC</span>
+        <span class="mbadge" style="border-color:rgba(91,141,184,0.4);color:var(--mint);background:rgba(91,141,184,0.08);">GED / EDM</span>
+        <span class="mbadge" style="border-color:rgba(91,141,184,0.4);color:var(--mint);background:rgba(91,141,184,0.08);">TPA Model</span>
+      </div>
+    </div>
+    <div class="modal-body">
+
+      <!-- ① CONTEXT -->
+      <div class="mblock">
+        <div class="mblock-title"><span class="mblock-dot" style="background:#5b8db8;"></span>Context</div>
+        <div class="mblock-text">During a meeting about a three-year contract renewal, we met with the client's decision makers, finance leaders, and operational teams, including student affairs and nurses. The client was satisfied with the insurance and medical assistance solution itself, including the insurer, premium, and service offer.<br><br>The concern came from the operational teams, who flagged issues with medical invoices being sent directly to students or the school on campus. Unlike a local Swiss insurer, the international model did not consistently support direct billing for outpatient care, and students often had to pay providers upfront because the insurer was not always recognized. The problem was not whether the invoices would be paid, but how they were received and handled within the operational flow between provider, student, and insurer.<br><br>In practice, the existing <strong>glocal model</strong> was not performing well enough operationally.</div>
+      </div>
+
+      <!-- ② RISK ANALYSIS -->
+      <div class="mblock">
+        <div class="mblock-title"><span class="mblock-dot" style="background:#5b8db8;"></span>Risk analysis</div>
+        <div style="overflow-x:auto;">
+<style>
+.bone-group{cursor:pointer;transition:opacity .2s}
+.bone-group.dimmed{opacity:0.25}
+.focus-panel{border-radius:10px;border:1.5px solid;padding:14px 16px;transition:all .2s;margin-top:12px}
+.focus-title{font-size:13px;font-weight:600;margin-bottom:8px}
+.focus-items{display:flex;flex-direction:column;gap:5px}
+.focus-item{font-size:12px;color:#4a5f78;line-height:1.5;padding-left:12px;position:relative}
+.focus-item::before{content:'—';position:absolute;left:0;color:#8a9bb0}
+.fish-hint{font-size:11px;color:#8a9bb0;text-align:center;margin-top:6px}
+</style>
+<svg viewBox="0 0 600 280" width="100%" xmlns="http://www.w3.org/2000/svg" style="min-width:420px;">
+<defs>
+  <marker id="sp" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="8" markerHeight="8" orient="auto">
+    <path d="M1 2L10 6L1 10" fill="none" stroke="#25314d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+</defs>
+<line x1="20" y1="140" x2="530" y2="140" stroke="#25314d" stroke-width="2.5" marker-end="url(#sp)"/>
+<rect x="536" y="116" width="58" height="48" rx="7" fill="#25314d"/>
+<text x="565" y="134" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" font-weight="700" fill="#7ae2cf">Invoice</text>
+<text x="565" y="148" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" font-weight="700" fill="#7ae2cf">flow</text>
+<g class="bone-group" id="g-school" onclick="fishFocus('school')">
+  <line x1="80" y1="50" x2="180" y2="140" stroke="#25314d" stroke-width="2"/>
+  <rect x="24" y="30" width="72" height="20" rx="5" fill="#25314d"/>
+  <text x="60" y="44" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9.5" font-weight="700" fill="#7ae2cf">School</text>
+  <line x1="98" y1="66" x2="148" y2="66" stroke="#25314d" stroke-width="0.8"/>
+  <text x="150" y="63" font-family="DM Sans,sans-serif" font-size="8" fill="#3d4e63">Reputational risk</text>
+  <line x1="116" y1="82" x2="166" y2="82" stroke="#25314d" stroke-width="0.8"/>
+  <text x="168" y="79" font-family="DM Sans,sans-serif" font-size="8" fill="#3d4e63">Providers refuse students</text>
+  <line x1="134" y1="98" x2="184" y2="98" stroke="#25314d" stroke-width="0.8"/>
+  <text x="186" y="95" font-family="DM Sans,sans-serif" font-size="8" fill="#3d4e63">No expertise / no process</text>
+  <line x1="150" y1="113" x2="200" y2="113" stroke="#25314d" stroke-width="0.8"/>
+  <text x="202" y="110" font-family="DM Sans,sans-serif" font-size="8" fill="#3d4e63">GDPR exposure</text>
+  <line x1="165" y1="127" x2="215" y2="127" stroke="#25314d" stroke-width="0.8"/>
+  <text x="217" y="124" font-family="DM Sans,sans-serif" font-size="8" fill="#3d4e63">Duty-of-care risk</text>
+</g>
+<g class="bone-group" id="g-insurer" onclick="fishFocus('insurer')">
+  <line x1="360" y1="50" x2="420" y2="140" stroke="#077a7d" stroke-width="2"/>
+  <rect x="318" y="30" width="72" height="20" rx="5" fill="#077a7d"/>
+  <text x="354" y="44" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9.5" font-weight="700" fill="#fff">Insurer</text>
+  <line x1="372" y1="68" x2="422" y2="68" stroke="#077a7d" stroke-width="0.8"/>
+  <text x="424" y="65" font-family="DM Sans,sans-serif" font-size="8" fill="#3d4e63">Seen as unreliable payer</text>
+  <line x1="384" y1="86" x2="434" y2="86" stroke="#077a7d" stroke-width="0.8"/>
+  <text x="436" y="83" font-family="DM Sans,sans-serif" font-size="8" fill="#3d4e63">Swiss market credibility</text>
+  <line x1="396" y1="104" x2="446" y2="104" stroke="#077a7d" stroke-width="0.8"/>
+  <text x="448" y="101" font-family="DM Sans,sans-serif" font-size="8" fill="#3d4e63">Strategy jeopardised</text>
+  <line x1="408" y1="122" x2="458" y2="122" stroke="#077a7d" stroke-width="0.8"/>
+  <text x="460" y="119" font-family="DM Sans,sans-serif" font-size="8" fill="#3d4e63">No cost-control</text>
+</g>
+<g class="bone-group" id="g-students" onclick="fishFocus('students')">
+  <line x1="100" y1="230" x2="220" y2="140" stroke="#3d4e63" stroke-width="2"/>
+  <rect x="44" y="228" width="72" height="20" rx="5" fill="#3d4e63"/>
+  <text x="80" y="242" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9.5" font-weight="700" fill="#b0c4d8">Students</text>
+  <line x1="124" y1="212" x2="184" y2="212" stroke="#3d4e63" stroke-width="0.8"/>
+  <text x="186" y="209" font-family="DM Sans,sans-serif" font-size="8" fill="#3d4e63">Upfront payment burden</text>
+  <line x1="160" y1="185" x2="220" y2="185" stroke="#3d4e63" stroke-width="0.8"/>
+  <text x="222" y="182" font-family="DM Sans,sans-serif" font-size="8" fill="#3d4e63">Care delayed or avoided</text>
+  <line x1="196" y1="158" x2="256" y2="158" stroke="#3d4e63" stroke-width="0.8"/>
+  <text x="258" y="155" font-family="DM Sans,sans-serif" font-size="8" fill="#3d4e63">Permit risk on departure</text>
+</g>
+<g class="bone-group" id="g-broker" onclick="fishFocus('broker')">
+  <line x1="380" y1="230" x2="460" y2="140" stroke="#5b8db8" stroke-width="2"/>
+  <rect x="334" y="228" width="72" height="20" rx="5" fill="#5b8db8"/>
+  <text x="370" y="242" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9.5" font-weight="700" fill="#fff">Broker</text>
+  <line x1="404" y1="204" x2="464" y2="204" stroke="#5b8db8" stroke-width="0.8"/>
+  <text x="466" y="201" font-family="DM Sans,sans-serif" font-size="8" fill="#3d4e63">Loss of tender + client</text>
+  <line x1="432" y1="173" x2="492" y2="173" stroke="#5b8db8" stroke-width="0.8"/>
+  <text x="494" y="170" font-family="DM Sans,sans-serif" font-size="8" fill="#3d4e63">Risk spreads to campuses</text>
+</g>
+</svg>
+<p class="fish-hint">Click a stakeholder to expand detail</p>
+<div id="fish-panel" class="focus-panel" style="display:none;">
+  <div class="focus-title" id="fish-title"></div>
+  <div class="focus-items" id="fish-items"></div>
+</div>
+<script>
+var fishActive=null;
+var fishData={
+  school:{color:'#25314d',bg:'rgba(37,49,77,0.05)',border:'#25314d',label:'School',items:['Reputational risk with local providers expecting reliable payment flows','Providers began refusing students or requesting upfront payment as unpaid invoices grew','Student affairs and nurses managing invoice follow-up without insurance expertise or formal process','GDPR concerns when providers sent invoices directly to the school','Duty-of-care risk — students unable to access care as easily as Swiss-insured peers']},
+  insurer:{color:'#077a7d',bg:'rgba(7,122,125,0.05)',border:'#077a7d',label:'Insurer',items:['Increasingly viewed as unreliable payer by local providers','Could weaken ability to operate and sell products in the Swiss market','Risks jeopardising strategy and reputation beyond the student portfolio','Absence of provider agreements meant no cost-control mechanisms in place']},
+  students:{color:'#3d4e63',bg:'rgba(61,78,99,0.05)',border:'#3d4e63',label:'Students',items:['Risk of not receiving care or delaying treatment due to high upfront costs','Some may have avoided seeing a doctor altogether due to affordability concerns','Students leaving with unpaid invoices could face permit or re-entry complications']},
+  broker:{color:'#5b8db8',bg:'rgba(91,141,184,0.05)',border:'#5b8db8',label:'Broker',items:['Main risk was losing the tender and client, with reputational damage in a small market','Same operational issue could spread to other campuses across the portfolio']}
+};
+function fishFocus(id){
+  var panel=document.getElementById('fish-panel');
+  var all=document.querySelectorAll('.bone-group');
+  if(fishActive===id){fishActive=null;panel.style.display='none';all.forEach(function(g){g.classList.remove('dimmed');});return;}
+  fishActive=id;
+  var d=fishData[id];
+  panel.style.display='block';
+  panel.style.borderColor=d.border;
+  panel.style.background=d.bg;
+  document.getElementById('fish-title').style.color=d.color;
+  document.getElementById('fish-title').textContent=d.label;
+  document.getElementById('fish-items').innerHTML=d.items.map(function(i){return'<div class="focus-item">'+i+'</div>';}).join('');
+  all.forEach(function(g){g.classList.toggle('dimmed',g.id!=='g-'+id);});
+}
+</script>
+        </div>
+      </div>
+
+      <!-- ③ DMAIC APPROACH -->
+      <div class="mblock">
+        <div class="mblock-title"><span class="mblock-dot" style="background:#5b8db8;"></span>DMAIC approach</div>
+        <style>
+          .dm-pipe{display:flex;align-items:stretch;gap:0;margin:8px 0 12px;overflow-x:auto;}
+          .dm-step{flex:1;min-width:52px;display:flex;flex-direction:column;align-items:center;cursor:pointer;position:relative;}
+          .dm-badge{height:40px;width:100%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#fff;position:relative;transition:filter .15s;}
+          .dm-step:not(:last-child) .dm-badge::after{content:'';position:absolute;right:-12px;top:0;width:0;height:0;border-top:20px solid transparent;border-bottom:20px solid transparent;border-left:12px solid;z-index:2;}
+          .dm-label{font-size:10px;font-weight:600;margin-top:6px;letter-spacing:.04em;}
+          .dm-step.active .dm-badge{filter:brightness(1.15);}
+          .dm-step.dimmed .dm-badge{filter:grayscale(0.6) opacity(0.4);}
+          .dm-step.dimmed .dm-label{opacity:0.4;}
+          .dm-detail{border-radius:10px;border:1.5px solid;padding:14px 16px;margin-top:4px;}
+          .dm-detail-title{font-size:13px;font-weight:600;margin-bottom:8px;}
+          .dm-detail-body{font-size:12px;color:#4a5f78;line-height:1.65;}
+          .dm-detail-body strong{color:#25314d;}
+          .dm-hint{font-size:11px;color:#8a9bb0;text-align:center;margin:4px 0 8px;}
+        </style>
+        <div class="dm-pipe">
+          <div class="dm-step" id="ds-D" onclick="dmFocus('D')">
+            <div class="dm-badge" style="background:#104055;border-radius:6px 0 0 6px;">
+              <span style="position:relative;z-index:3;">D</span>
+            </div>
+            <div class="dm-badge" style="display:none;"></div>
+            <div class="dm-label" style="color:#104055;">Define</div>
+          </div>
+          <div class="dm-step" id="ds-M" onclick="dmFocus('M')">
+            <div class="dm-badge" style="background:#135568;">
+              <span style="position:relative;z-index:3;">M</span>
+            </div>
+            <div class="dm-label" style="color:#135568;">Measure</div>
+          </div>
+          <div class="dm-step" id="ds-A" onclick="dmFocus('A')">
+            <div class="dm-badge" style="background:#077a7d;">
+              <span style="position:relative;z-index:3;">A</span>
+            </div>
+            <div class="dm-label" style="color:#077a7d;">Analyze</div>
+          </div>
+          <div class="dm-step" id="ds-I" onclick="dmFocus('I')">
+            <div class="dm-badge" style="background:#0a9e8f;">
+              <span style="position:relative;z-index:3;">I</span>
+            </div>
+            <div class="dm-label" style="color:#0a9e8f;">Improve</div>
+          </div>
+          <div class="dm-step" id="ds-C" onclick="dmFocus('C')">
+            <div class="dm-badge" style="background:#7ae2cf;border-radius:0 6px 6px 0;">
+              <span style="color:#104055;position:relative;z-index:3;">C</span>
+            </div>
+            <div class="dm-label" style="color:#0a9e8f;">Control</div>
+          </div>
+        </div>
+        <p class="dm-hint">Click a step to expand</p>
+        <div id="dm-panel" style="display:none;" class="dm-detail">
+          <div class="dm-detail-title" id="dm-title"></div>
+          <div class="dm-detail-body" id="dm-body"></div>
+        </div>
+        <script>
+        var dmActive=null;
+        var dmData={
+          D:{color:'#104055',border:'rgba(16,64,85,0.3)',bg:'rgba(16,64,85,0.04)',label:'Define',
+            body:'The issue was not just the client\'s concern, but a broken invoice flow affecting students, providers, the school, and the insurer.<br><br><strong style="color:var(--mint);">Problem:</strong> Invoices were sent to students, remained unpaid, were misrouted, or paid late, with no clear process or ownership.<br><br><strong style="color:var(--mint);">Requirements:</strong> Zero invoices on campus, no upfront payment by students, provider payment within Swiss SLA standards, and invoices sent to an entity in Switzerland.<br><br><strong style="color:var(--mint);">Goal:</strong> Put in place outpatient direct billing so invoices would go directly to the insurer and be paid on time.'},
+          M:{color:'#135568',border:'rgba(19,85,104,0.3)',bg:'rgba(19,85,104,0.04)',label:'Measure',
+            body:'Used insurance data, rework cases, duplicate declines, and feedback from other campuses to quantify the issue and establish a baseline for improvement.'},
+          A:{color:'#077a7d',border:'rgba(7,122,125,0.3)',bg:'rgba(7,122,125,0.04)',label:'Analyze',
+            body:'The workflow showed fragmented routing, delays, manual input, wrong payment channels, and lack of traceability. Invoices were simultaneously sent to multiple parties with no ownership and no SLA visibility.'},
+          I:{color:'#0a9e8f',border:'rgba(10,158,143,0.3)',bg:'rgba(10,158,143,0.04)',label:'Improve',
+            body:'Antaé created a local medical provider department and implemented a GED system, adopting a TPA model to centralise invoice routing, automate processing, and establish direct billing with local providers.'},
+          C:{color:'#077a7d',border:'rgba(122,226,207,0.5)',bg:'rgba(122,226,207,0.06)',label:'Control',
+            body:'The process was formalized with a documented and insurer-approved procedure. GED automation, regular provider database updates, and dashboard reporting helped ensure accurate payment routing, maintain process control, and support sustainable operations.'}
+        };
+        function dmFocus(id){
+          var panel=document.getElementById('dm-panel');
+          var steps=document.querySelectorAll('.dm-step');
+          if(dmActive===id){
+            dmActive=null;panel.style.display='none';
+            steps.forEach(function(s){s.classList.remove('active','dimmed');});
+            return;
+          }
+          dmActive=id;
+          var d=dmData[id];
+          panel.style.display='block';
+          panel.style.borderColor=d.border;
+          panel.style.background=d.bg;
+          document.getElementById('dm-title').style.color=d.color;
+          document.getElementById('dm-title').textContent=d.label;
+          document.getElementById('dm-body').innerHTML=d.body;
+          steps.forEach(function(s){
+            var isActive=s.id==='ds-'+id;
+            s.classList.toggle('active',isActive);
+            s.classList.toggle('dimmed',!isActive);
+          });
+        }
+        </script>
+
+        <!-- WORKFLOW DIAGRAMS — full width, outside m-steps grid -->
+        <div style="margin:12px 0;">
+                <div class="wf-tabs" style="border-radius:6px 6px 0 0;overflow:hidden;display:flex;">
+                  <button class="wf-tab as-is active" onclick="switchGed('before')" style="flex:1;padding:8px 10px;font-size:10px;">⚠ BEFORE — Prior to GED</button>
+                  <button class="wf-tab to-be" onclick="switchGed('after')" style="flex:1;padding:8px 10px;font-size:10px;">✓ AFTER — New operating model</button>
+                </div>
+
+                <!-- BEFORE: brand-colour swimlane -->
+                <div id="ged-before" style="display:block;overflow-x:auto;background:#f5f7fa;border-radius:0 0 6px 6px;padding:0;">
+                  <style>
+                    .sw-wrap{font-family:'DM Sans',sans-serif;font-size:11px;min-width:860px;}
+                    .sw-title{text-align:center;font-size:9.5px;font-weight:700;letter-spacing:.08em;padding:6px;text-transform:uppercase;}
+                    .sw-lanes{display:flex;border-top:1px solid #ccc;}
+                    .sw-lane{flex:1;border-right:1px solid var(--lgrey);display:flex;flex-direction:column;}
+                    .sw-lane:last-child{border-right:none;}
+                    .sw-lane-hd{padding:5px 4px;text-align:center;font-size:8px;font-weight:700;letter-spacing:.05em;}
+                    .sw-lane-body{padding:8px 6px;flex:1;display:flex;flex-direction:column;gap:6px;align-items:center;}
+                    .sw-node{width:90%;padding:5px 6px;border-radius:4px;font-size:9px;text-align:center;line-height:1.3;}
+                    .sw-diamond-wrap{width:90%;display:flex;justify-content:center;margin:2px 0;}
+                    .sw-diamond{width:52px;height:52px;background:#7ae2cf;border:2px solid #104055;color:#25314d;font-weight:700;font-size:7.5px;display:flex;align-items:center;justify-content:center;text-align:center;transform:rotate(45deg);flex-shrink:0;}
+                    .sw-diamond-inner{transform:rotate(-45deg);padding:2px;line-height:1.3;}
+                    .sw-ellipse{width:80%;padding:6px;border-radius:50px;font-size:9px;text-align:center;font-weight:700;}
+                    .sw-term{width:80%;padding:5px;border-radius:12px;font-size:9px;text-align:center;font-weight:600;}
+                    .sw-note{width:80%;padding:5px 6px;font-size:8.5px;background:#f0fafa;border:1px solid #077a7d;color:#25314d;text-align:left;border-radius:3px;}
+                    .sw-arr{text-align:center;font-size:10px;line-height:1;}
+                    .sw-delay{display:flex;gap:2px;justify-content:center;font-size:11px;}
+                    .sw-fan{width:90%;display:flex;flex-direction:column;gap:3px;}
+                    .sw-fan-item{padding:3px 6px;border-radius:3px;font-size:8.5px;border:1px solid #8a9bb0;background:#f0f2f5;color:#25314d;}
+                    .sw-bar{padding:5px 8px;font-size:8.5px;font-weight:600;text-align:center;}
+                  </style>
+                  <div class="sw-wrap">
+                    <div class="sw-title" style="background:#25314d;color:#fff;">Invoice billing cycle — prior to GED implementation</div>
+                    <div class="sw-lanes">
+                      <!-- Student -->
+                      <div class="sw-lane" style="background:#f0f2f5;flex:1.1;">
+                        <div class="sw-lane-hd" style="background:#3d4e63;color:#fff;">STUDENT</div>
+                        <div class="sw-lane-body">
+                          <div class="sw-ellipse" style="background:#25314d;border:1.5px solid #5b8db8;color:#7ae2cf;">START<br><span style="font-size:8px;font-weight:400;color:#b0c4d8;">Student insured<br>collective scheme</span></div>
+                          <div class="sw-arr" style="color:#5b8db8;">↓</div>
+                          <div class="sw-diamond-wrap"><div class="sw-diamond"><div class="sw-diamond-inner">Services covered under the plan?</div></div></div>
+                          <div style="display:flex;gap:4px;width:90%;justify-content:space-between;font-size:8px;color:#5b8db8;font-weight:600;"><span>NO ↓</span><span>YES →</span></div>
+                          <div class="sw-term" style="background:#25314d;color:#fff;">End of process</div>
+                        </div>
+                      </div>
+                      <!-- Provider -->
+                      <div class="sw-lane" style="background:#eef1f5;flex:1.4;">
+                        <div class="sw-lane-hd" style="background:#3d4e63;color:#fff;">PROVIDER</div>
+                        <div class="sw-lane-body">
+                          <div class="sw-node" style="background:#fff;border:1.5px solid #8a9bb0;color:#25314d;">Medical care received</div>
+                          <div class="sw-arr" style="color:#5b8db8;">↓</div>
+                          <div class="sw-node" style="background:#fff;border:1.5px solid #8a9bb0;color:#25314d;">Invoice issued for services provided</div>
+                          <div class="sw-arr" style="color:#5b8db8;">↓</div>
+                          <div class="sw-diamond-wrap"><div class="sw-diamond"><div class="sw-diamond-inner">Who is the invoice issued to?</div></div></div>
+                          <div class="sw-arr" style="color:#5b8db8;">↓</div>
+                          <div class="sw-fan">
+                            <div class="sw-fan-item">→ Member (student)</div>
+                            <div class="sw-fan-item">→ Billing company</div>
+                            <div class="sw-fan-item">→ School</div>
+                            <div class="sw-fan-item">→ Broker</div>
+                            <div class="sw-fan-item">→ Allianz CH (delayed)</div>
+                            <div class="sw-fan-item">→ Allianz Care Dublin</div>
+                          </div>
+                          <div class="sw-note">30-day SLA starts from day of invoice issuance</div>
+                        </div>
+                      </div>
+                      <!-- Billing Co -->
+                      <div class="sw-lane" style="background:#f0f2f5;flex:1;">
+                        <div class="sw-lane-hd" style="background:#3d4e63;color:#fff;">BILLING CO.</div>
+                        <div class="sw-lane-body">
+                          <div style="height:70px;"></div>
+                          <div class="sw-node" style="background:#fff;border:1.5px solid #8a9bb0;color:#25314d;">Invoice issued to recipient as per provider's instructions</div>
+                          <div class="sw-delay" style="color:#8a9bb0;">⏱⏱⏱</div>
+                          <div class="sw-node" style="background:#fff;border:1.5px solid #8a9bb0;color:#25314d;">Transfer reimb. to provider</div>
+                          <div class="sw-node" style="background:#f0fafa;border:1px solid #077a7d;color:#077a7d;font-size:8.5px;">SLA stops at this stage</div>
+                        </div>
+                      </div>
+                      <!-- School -->
+                      <div class="sw-lane" style="background:#eef1f5;flex:.9;">
+                        <div class="sw-lane-hd" style="background:#3d4e63;color:#fff;">SCHOOL</div>
+                        <div class="sw-lane-body">
+                          <div style="height:30px;"></div>
+                          <div class="sw-node" style="background:#fff;border:1.5px solid #8a9bb0;color:#25314d;">Invoices received on campus → sent to broker</div>
+                          <div class="sw-delay" style="color:#8a9bb0;">⏱</div>
+                        </div>
+                      </div>
+                      <!-- Broker -->
+                      <div class="sw-lane" style="background:#f0f2f5;flex:1;">
+                        <div class="sw-lane-hd" style="background:#3d4e63;color:#fff;">BROKER</div>
+                        <div class="sw-lane-body">
+                          <div style="height:20px;"></div>
+                          <div class="sw-node" style="background:#fff;border:1.5px solid #8a9bb0;color:#25314d;">Invoices received by email or by post</div>
+                          <div class="sw-delay" style="color:#8a9bb0;">⏱</div>
+                          <div class="sw-node" style="background:#fff;border:1.5px solid #8a9bb0;color:#25314d;">Forwarded to Allianz Care</div>
+                          <div class="sw-delay" style="color:#8a9bb0;">⏱⏱</div>
+                        </div>
+                      </div>
+                      <!-- Allianz CH -->
+                      <div class="sw-lane" style="background:#eef1f5;flex:1;">
+                        <div class="sw-lane-hd" style="background:#3d4e63;color:#fff;">ALLIANZ CH</div>
+                        <div class="sw-lane-body">
+                          <div style="height:60px;"></div>
+                          <div class="sw-node" style="background:#fff;border:1.5px solid #8a9bb0;color:#25314d;">Collects paper invoices → sends batch to Allianz Care Dublin</div>
+                          <div class="sw-delay" style="color:#8a9bb0;">⏱</div>
+                        </div>
+                      </div>
+                      <!-- Allianz Care Dublin -->
+                      <div class="sw-lane" style="background:#f0f2f5;flex:1.3;">
+                        <div class="sw-lane-hd" style="background:#3d4e63;color:#fff;">ALLIANZ CARE DUBLIN</div>
+                        <div class="sw-lane-body">
+                          <div style="height:80px;"></div>
+                          <div class="sw-node" style="background:#fff;border:1.5px solid #25314d;color:#25314d;">Adjudication Process</div>
+                          <div class="sw-arr" style="color:#5b8db8;">↓</div>
+                          <div class="sw-diamond-wrap"><div class="sw-diamond"><div class="sw-diamond-inner">Who is to be reimbursed?</div></div></div>
+                          <div class="sw-arr" style="color:#5b8db8;">↓</div>
+                          <div class="sw-node" style="background:#f0f2f5;border:1px solid #8a9bb0;color:#25314d;font-size:8.5px;">Transfer to billing agency / provider / member</div>
+                          <div class="sw-arr" style="color:#5b8db8;">↓</div>
+                          <div class="sw-term" style="background:#25314d;color:#fff;">END: Invoice Paid</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="sw-bar" style="background:#3d4e63;color:#b0c4d8;">⚡ Every step manual · Invoices fragmented across 6 parties · No traceability · 40+ day average resolution</div>
+                  </div>
+                </div>
+
+                <!-- AFTER: brand-colour swimlane -->
+                <div id="ged-after" style="display:none;overflow-x:auto;background:#f4faf9;border-radius:0 0 6px 6px;padding:0;">
+                  <div class="sw-wrap">
+                    <div class="sw-title" style="background:#7ae2cf;color:#104055;">Invoice billing cycle — new operating model (GED)</div>
+                    <div class="sw-lanes" style="border-color:#b0ddd9;">
+                      <!-- Student -->
+                      <div class="sw-lane" style="background:#f4faf9;border-color:#b0ddd9;flex:1.1;">
+                        <div class="sw-lane-hd" style="background:#104055;color:#fff;">STUDENT</div>
+                        <div class="sw-lane-body">
+                          <div class="sw-ellipse" style="background:#077a7d;border:1.5px solid #104055;color:#fff;">START<br><span style="font-size:8px;font-weight:400;">Student insured<br>collective scheme</span></div>
+                          <div class="sw-arr" style="color:#077a7d;">↓</div>
+                          <div class="sw-diamond-wrap"><div class="sw-diamond"><div class="sw-diamond-inner">Services covered under the plan?</div></div></div>
+                          <div style="display:flex;gap:4px;width:90%;justify-content:space-between;font-size:8px;color:#077a7d;font-weight:600;"><span>NO ↓</span><span>YES →</span></div>
+                          <div class="sw-term" style="background:#25314d;color:#fff;">End of process</div>
+                        </div>
+                      </div>
+                      <!-- Provider -->
+                      <div class="sw-lane" style="background:#f0f8f7;border-color:#b0ddd9;flex:1.4;">
+                        <div class="sw-lane-hd" style="background:#104055;color:#fff;">PROVIDER</div>
+                        <div class="sw-lane-body">
+                          <div class="sw-node" style="background:#fff;border:1.5px solid #077a7d;color:#25314d;">Medical care received</div>
+                          <div class="sw-arr" style="color:#077a7d;">↓</div>
+                          <div class="sw-node" style="background:#fff;border:1.5px solid #077a7d;color:#25314d;">Invoice issued for services provided</div>
+                          <div class="sw-arr" style="color:#077a7d;">↓</div>
+                          <div class="sw-diamond-wrap"><div class="sw-diamond"><div class="sw-diamond-inner">Who is the invoice issued to?</div></div></div>
+                          <div class="sw-arr" style="color:#077a7d;">↓</div>
+                          <div class="sw-node" style="background:#fff;border:1.5px solid #077a7d;color:#25314d;">Invoice sent to the broker</div>
+                          <div class="sw-note">30-day SLA starts from day of invoice issuance</div>
+                          <div class="sw-arr" style="color:#077a7d;">↓</div>
+                          <div class="sw-term" style="background:#25314d;color:#fff;">END: Invoice Paid</div>
+                        </div>
+                      </div>
+                      <!-- Billing Co -->
+                      <div class="sw-lane" style="background:#f4faf9;border-color:#b0ddd9;flex:1;">
+                        <div class="sw-lane-hd" style="background:#104055;color:#fff;">BILLING CO.</div>
+                        <div class="sw-lane-body">
+                          <div style="height:80px;"></div>
+                          <div class="sw-node" style="background:#fff;border:1.5px solid #077a7d;color:#25314d;">Invoice sent as per contacts communicated by provider</div>
+                          <div class="sw-arr" style="color:#077a7d;">↓</div>
+                          <div class="sw-node" style="background:#e6faf8;border:1.5px solid #077a7d;color:#25314d;">Transfer reimbursement received to provider</div>
+                          <div class="sw-node" style="background:#f0fafa;border:1px solid #077a7d;color:#077a7d;font-size:8.5px;">SLA stops at this stage</div>
+                        </div>
+                      </div>
+                      <!-- Broker + GED -->
+                      <div class="sw-lane" style="background:#f0f8f7;border-color:#b0ddd9;flex:1.4;">
+                        <div class="sw-lane-hd" style="background:#104055;color:#fff;">BROKER + GED SYSTEM</div>
+                        <div class="sw-lane-body">
+                          <div class="sw-node" style="background:#104055;border:2px solid #077a7d;color:#7ae2cf;font-weight:600;">Invoices received by email or by post</div>
+                          <div class="sw-arr" style="color:#077a7d;">↓</div>
+                          <div class="sw-node" style="background:#fff;border:1.5px solid #077a7d;color:#25314d;">📁 Invoices uploaded in the GED system</div>
+                          <div class="sw-arr" style="color:#077a7d;">↓</div>
+                          <div class="sw-node" style="background:#fff;border:1.5px solid #25314d;color:#25314d;">⚙ Indexing Process<br><span style="font-size:8px;color:#077a7d;">automated routing</span></div>
+                          <div class="sw-arr" style="color:#077a7d;">→ Allianz Care Dublin</div>
+                        </div>
+                      </div>
+                      <!-- Allianz Care Dublin -->
+                      <div class="sw-lane" style="background:#f4faf9;border-color:#b0ddd9;flex:1.4;">
+                        <div class="sw-lane-hd" style="background:#104055;color:#fff;">ALLIANZ CARE DUBLIN</div>
+                        <div class="sw-lane-body">
+                          <div class="sw-node" style="background:#fff;border:1.5px solid #077a7d;color:#25314d;">Receives &amp; inputs invoices in the system</div>
+                          <div class="sw-arr" style="color:#077a7d;">↓</div>
+                          <div class="sw-node" style="background:#fff;border:1.5px solid #25314d;color:#25314d;">Adjudication Process</div>
+                          <div class="sw-arr" style="color:#077a7d;">↓</div>
+                          <div class="sw-diamond-wrap"><div class="sw-diamond"><div class="sw-diamond-inner">Who is to be reimbursed?</div></div></div>
+                          <div class="sw-arr" style="color:#077a7d;">↓</div>
+                          <div class="sw-node" style="background:#e6faf8;border:1.5px solid #077a7d;color:#25314d;">Transfer reimbursement to billing agency / provider</div>
+                          <div class="sw-arr" style="color:#077a7d;">↓</div>
+                          <div class="sw-term" style="background:#077a7d;color:#fff;">END: Invoice Paid ✓</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="sw-bar" style="background:#077a7d;color:#fff;">✓ Centralised · GED automated · Single entry point · 20-day resolution · Full traceability</div>
+                  </div>
+                </div>
+              </div><!-- /workflow diagrams -->
+      </div>
+
+      <!-- ④ OUTCOME -->
+        <div class="mblock-title"><span class="mblock-dot" style="background:#5b8db8;"></span>Outcome</div>
+        <style>
+.puz-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px;}
+.puz-piece{border-radius:12px;padding:16px 16px 14px;border:1.5px solid;transition:transform .15s,box-shadow .15s;cursor:default;}
+.puz-piece:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(7,122,125,0.13);}
+.puz-piece-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;}
+.puz-piece-title{font-size:13px;font-weight:700;margin-bottom:5px;}
+.puz-piece-desc{font-size:11.5px;line-height:1.55;}
+</style>
+        <div class="puz-grid">
+          <div class="puz-piece" style="background:rgba(16,64,85,0.05);border-color:rgba(16,64,85,0.18);">
+            <div class="puz-piece-icon" style="background:rgba(16,64,85,0.1);border:1px solid rgba(16,64,85,0.2);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#104055" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10z"/><path d="M12 8v4l3 3"/></svg>
+            </div>
+            <div class="puz-piece-title" style="color:var(--dteal);">Invoice processing automated</div>
+            <div class="puz-piece-desc" style="color:var(--grey);">GED automated routing, reducing resolution from 20 days to 24 hours.</div>
+          </div>
+          <div class="puz-piece" style="background:rgba(7,122,125,0.05);border-color:rgba(7,122,125,0.2);">
+            <div class="puz-piece-icon" style="background:rgba(7,122,125,0.1);border:1px solid rgba(7,122,125,0.2);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#077a7d" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div class="puz-piece-title" style="color:var(--teal);">Provider cooperation restored</div>
+            <div class="puz-piece-desc" style="color:var(--grey);">Local providers re-engaged; school teams relieved from invoice follow-up.</div>
+          </div>
+          <div class="puz-piece" style="background:rgba(7,122,125,0.05);border-color:rgba(7,122,125,0.2);">
+            <div class="puz-piece-icon" style="background:rgba(7,122,125,0.1);border:1px solid rgba(7,122,125,0.2);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#077a7d" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+            </div>
+            <div class="puz-piece-title" style="color:var(--teal);">Cost-containment model established</div>
+            <div class="puz-piece-desc" style="color:var(--grey);">Structured provider network improved long-term portfolio management and reduced inefficiencies.</div>
+          </div>
+          <div class="puz-piece" style="background:rgba(16,64,85,0.05);border-color:rgba(16,64,85,0.18);">
+            <div class="puz-piece-icon" style="background:rgba(16,64,85,0.1);border:1px solid rgba(16,64,85,0.2);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#104055" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+            </div>
+            <div class="puz-piece-title" style="color:var(--dteal);">Scalable model with lasting impact</div>
+            <div class="puz-piece-desc" style="color:var(--grey);">A recurring pain point turned into a scalable model with lasting impact on service quality and cost control.</div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ⑤ KEY INSIGHT -->
+      <div class="m-insight">
+        <div class="m-insight-label">Key insight</div>
+        <div class="m-insight-text">The real value of the project was not only solving an invoice-processing problem, but building a scalable operational model that aligned client expectations, provider requirements, and long-term cost control. By structuring a local provider network and improving invoice governance, Antaé turned a recurring pain point into a strategic market advantage.</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     MODAL 2: Provider Network Upload Standardization
+═══════════════════════════════════════════════════ -->
+<div id="m2" class="modal-overlay" onclick="if(event.target===this)closeModal('m2')">
+  <div class="modal-inner">
+    <div class="modal-head" style="background:linear-gradient(135deg,var(--dteal) 0%,#0a2e30 100%);">
+      <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--teal),var(--mint));"></div>
+      <button class="modal-close" onclick="closeModal('m2')">✕</button>
+      <div style="width:44px;height:44px;border-radius:12px;background:rgba(7,122,125,0.35);border:1px solid rgba(122,226,207,0.3);display:flex;align-items:center;justify-content:center;margin-bottom:12px;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7ae2cf" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v6c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 11v6c0 1.66 4.03 3 9 3s9-1.34 9-3v-6"/></svg>
+      </div>
+      <div class="modal-eyebrow" style="color:var(--mint);">Data Architecture – Mapping – Automation</div>
+      <div class="modal-title">Provider network upload standardization</div>
+      <div class="modal-subtitle">April International Care France · Paris · 2020–2022</div>
+      <div class="modal-badges">
+        <span class="mbadge" style="border-color:rgba(7,122,125,0.4);color:var(--mint);background:rgba(7,122,125,0.1);">Data Mapping</span>
+        <span class="mbadge" style="border-color:rgba(7,122,125,0.4);color:var(--mint);background:rgba(7,122,125,0.1);">Data Governance</span>
+        <span class="mbadge" style="border-color:rgba(7,122,125,0.4);color:var(--mint);background:rgba(7,122,125,0.1);">TPA Network Integration</span>
+        <span class="mbadge" style="border-color:rgba(7,122,125,0.4);color:var(--mint);background:rgba(7,122,125,0.1);">Patient Steering</span>
+      </div>
+    </div>
+    <div class="modal-body">
+
+      <!-- ① CONTEXT -->
+      <div class="mblock">
+        <div class="mblock-title"><span class="mblock-dot" style="background:var(--teal);"></span>Context</div>
+        <div class="mblock-text">A CSM system and client-facing app were already in place to help members find in-network providers, but provider data updates remained manual. Although bulk upload automation was already on the IT roadmap, a VIP tender with a short deadline accelerated the project so the full medical network could be presented to the client. The goal was to translate business requirements into a structured process for cleaning, mapping, and uploading provider network data.</div>
+      </div>
+
+      <!-- ② CHALLENGES -->
+      <div class="mblock">
+        <div class="mblock-title"><span class="mblock-dot" style="background:var(--teal);"></span>Challenges</div>
+        <div class="m-risk-grid-4">
+          <div class="m-risk-item" style="border-left-color:var(--teal);">
+            <div class="m-risk-head" style="color:var(--teal);">Uncharted territory</div>
+            <div class="m-risk-body"><ul>
+              <li>The bulk upload had never been attempted before</li>
+              <li>Uncertainty about whether it would work and whether the CSM system could support such a high volume of providers</li>
+              <li>The file format had to be defined, created, and tested from the ground up</li>
+            </ul></div>
+          </div>
+          <div class="m-risk-item" style="border-left-color:var(--navy);">
+            <div class="m-risk-head" style="color:var(--navy);">Data quality &amp; fragmentation</div>
+            <div class="m-risk-body"><ul>
+              <li>Provider data came from multiple sources in different formats</li>
+              <li>Needed to be cleaned, standardised, and made usable in both backend and app</li>
+              <li>Duplicates, incomplete records, and ghost providers to remove</li>
+            </ul></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ③ APPROACH — 7 PHASES -->
+      <div class="mblock">
+        <div class="mblock-title"><span class="mblock-dot" style="background:var(--teal);"></span>Approach — 7 phases</div>
+        <style>
+          .stp-track{display:flex;align-items:center;gap:0;margin:12px 0 16px;position:relative;}
+          .stp-line{flex:1;height:2px;background:rgba(7,122,125,0.18);}
+          .stp-line.stp-done{background:var(--teal);}
+          .stp-dot{width:32px;height:32px;border-radius:50%;border:2px solid rgba(7,122,125,0.3);background:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#8a9bb0;cursor:pointer;transition:all .2s;flex-shrink:0;position:relative;z-index:1;}
+          .stp-dot:hover{border-color:var(--teal);color:var(--teal);}
+          .stp-dot.stp-active{background:var(--teal);border-color:var(--teal);color:#fff;transform:scale(1.15);}
+          .stp-dot.stp-done{background:var(--teal);border-color:var(--teal);color:#fff;}
+          .stp-panel{border-radius:10px;border:1.5px solid rgba(7,122,125,0.25);background:rgba(7,122,125,0.04);padding:14px 16px;}
+          .stp-panel-top{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+          .stp-panel-num{width:28px;height:28px;border-radius:50%;background:var(--teal);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+          .stp-panel-title{font-size:13px;font-weight:600;color:var(--teal);}
+          .stp-panel-tag{display:inline-block;font-size:10px;padding:2px 8px;border-radius:20px;background:rgba(7,122,125,0.1);color:var(--teal);border:0.5px solid rgba(7,122,125,0.25);margin-bottom:8px;}
+          .stp-panel-body{font-size:12px;color:#4a5f78;line-height:1.65;}
+          .stp-nav{display:flex;align-items:center;justify-content:space-between;margin-top:12px;}
+          .stp-btn{font-size:12px;font-weight:600;color:var(--teal);background:none;border:1.5px solid rgba(7,122,125,0.3);border-radius:8px;padding:6px 14px;cursor:pointer;transition:all .15s;}
+          .stp-btn:hover{background:rgba(7,122,125,0.08);border-color:var(--teal);}
+          .stp-btn:disabled{opacity:0.3;cursor:default;}
+          .stp-count{font-size:11px;color:#8a9bb0;}
+        </style>
+        <div class="stp-track" id="stp-track"></div>
+        <div class="stp-panel">
+          <div class="stp-panel-top">
+            <div class="stp-panel-num" id="stp-num"></div>
+            <div class="stp-panel-title" id="stp-title"></div>
+          </div>
+          <div class="stp-panel-body" id="stp-body"></div>
+        </div>
+        <div class="stp-nav">
+          <button class="stp-btn" id="stp-prev" onclick="stpGo(stpCur-1)">← Prev</button>
+          <span class="stp-count" id="stp-count"></span>
+          <button class="stp-btn" id="stp-next" onclick="stpGo(stpCur+1)">Next →</button>
+        </div>
+        <script>
+        var stpData=[
+          {title:'Mapping template',body:'Before working on the data itself, a field mapping template was built with IT to avoid reworking the file multiple times as the mapping evolved. This defined the transformation rules needed to convert TPA formats into the CMS ones.'},
+          {title:'Data audit',body:'TPA data quality assessed and gaps identified, including which fields existed, which were missing, and which were not useful in our context.'},
+          {title:'Data cleaning',body:'Data cleaned country by country by removing duplicates, standardising addresses, adding missing specialties, and verifying phone and bank details.'},
+          {title:'Data transformation and system rules',body:'Selected fields adapted to match backend translation requirements. We also defined how updates would be handled in the system: some fields, such as addresses, could be edited directly, while others required deactivating an existing provider and creating a new record, which added a further layer of complexity.'},
+          {title:'Upload and validation',body:'Each upload was tested in the backend and in the member-facing app to verify display accuracy, search results, and CMS-to-app transfer.'},
+          {title:'Data governance',body:'Defined access rules, amendment protocols, and ownership, and sensitized collaborators to the importance of ongoing maintenance.'},
+          {title:'Documentation',body:'Documented the full end-to-end process so future teams could replicate it without starting from scratch.'}
+        ];
+        var stpCur=0;
+        function stpBuild(){
+          var track=document.getElementById('stp-track');
+          track.innerHTML='';
+          for(var i=0;i<stpData.length;i++){
+            if(i>0){var l=document.createElement('div');l.className='stp-line'+(i<=stpCur?' stp-done':'');track.appendChild(l);}
+            var d=document.createElement('div');
+            d.className='stp-dot'+(i===stpCur?' stp-active':i<stpCur?' stp-done':'');
+            d.textContent=i+1;
+            (function(idx){d.onclick=function(){stpGo(idx);};})(i);
+            track.appendChild(d);
+          }
+        }
+        function stpRender(){
+          var s=stpData[stpCur];
+          document.getElementById('stp-num').textContent=stpCur+1;
+          document.getElementById('stp-title').textContent=s.title;
+          document.getElementById('stp-body').textContent=s.body;
+          document.getElementById('stp-count').textContent=(stpCur+1)+' / '+stpData.length;
+          document.getElementById('stp-prev').disabled=stpCur===0;
+          document.getElementById('stp-next').disabled=stpCur===stpData.length-1;
+          stpBuild();
+        }
+        function stpGo(idx){
+          if(idx<0||idx>=stpData.length)return;
+          stpCur=idx;stpRender();
+        }
+        stpRender();
+        </script>
+      </div>
+
+      <!-- ④ OUTCOMES — puzzle diagram -->
+      <div class="mblock">
+        <div class="mblock-title"><span class="mblock-dot" style="background:var(--teal);"></span>Outcome</div>
+        <style>
+          .puz-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px;}
+          .puz-piece{border-radius:12px;padding:16px 16px 14px;position:relative;cursor:default;transition:transform .15s,box-shadow .15s;border:1.5px solid;}
+          .puz-piece:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(7,122,125,0.13);}
+          .puz-piece-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;}
+          .puz-piece-title{font-size:13px;font-weight:700;margin-bottom:5px;}
+          .puz-piece-desc{font-size:11.5px;line-height:1.55;}
+          .puz-connector{display:flex;align-items:center;justify-content:center;font-size:18px;color:rgba(7,122,125,0.3);font-weight:300;}
+        </style>
+        <div class="puz-grid">
+          <div class="puz-piece" style="background:rgba(16,64,85,0.05);border-color:rgba(16,64,85,0.18);">
+            <div class="puz-piece-icon" style="background:rgba(16,64,85,0.1);border:1px solid rgba(16,64,85,0.2);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#104055" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="16 12 12 8 8 12"/><line x1="12" y1="16" x2="12" y2="8"/></svg>
+            </div>
+            <div class="puz-piece-title" style="color:var(--dteal);">VIP tender supported</div>
+            <div class="puz-piece-desc" style="color:var(--grey);">Fully operational provider network in the app, enabling the client to see the network in real time.</div>
+          </div>
+          <div class="puz-piece" style="background:rgba(7,122,125,0.05);border-color:rgba(7,122,125,0.2);">
+            <div class="puz-piece-icon" style="background:rgba(7,122,125,0.1);border:1px solid rgba(7,122,125,0.2);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#077a7d" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <div class="puz-piece-title" style="color:var(--teal);">Bulk upload live</div>
+            <div class="puz-piece-desc" style="color:var(--grey);">5,000+ providers integrated, improving data quality and usability across backend and member app.</div>
+          </div>
+          <div class="puz-piece" style="background:rgba(7,122,125,0.05);border-color:rgba(7,122,125,0.2);">
+            <div class="puz-piece-icon" style="background:rgba(7,122,125,0.1);border:1px solid rgba(7,122,125,0.2);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#077a7d" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            </div>
+            <div class="puz-piece-title" style="color:var(--teal);">Repeatable framework</div>
+            <div class="puz-piece-desc" style="color:var(--grey);">Standardised, documented process replicable by future teams without starting from scratch.</div>
+          </div>
+          <div class="puz-piece" style="background:rgba(16,64,85,0.05);border-color:rgba(16,64,85,0.18);">
+            <div class="puz-piece-icon" style="background:rgba(16,64,85,0.1);border:1px solid rgba(16,64,85,0.2);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#104055" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div class="puz-piece-title" style="color:var(--dteal);">Patient steering enabled</div>
+            <div class="puz-piece-desc" style="color:var(--grey);">Preferred network steers members toward conventions and negotiated discounts, improving cost containment.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑤ KEY INSIGHT -->
+      <div class="m-insight">
+        <div class="m-insight-label">Key insight</div>
+        <div class="m-insight-text">The real challenge was not the upload itself, but designing the rules, structure, and governance needed for the network to work in both the backend and the app.</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     MODAL 3: Website & Digital Customer Journey
+═══════════════════════════════════════════════════ -->
+<div id="m3" class="modal-overlay" onclick="if(event.target===this)closeModal('m3')">
+  <div class="modal-inner">
+    <div class="modal-head" style="background:linear-gradient(135deg,var(--navy) 0%,var(--dteal) 100%);">
+      <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--navy),var(--teal));"></div>
+      <button class="modal-close" onclick="closeModal('m3')">✕</button>
+      <div style="width:44px;height:44px;border-radius:12px;background:rgba(37,49,77,0.4);border:1px solid rgba(122,226,207,0.3);display:flex;align-items:center;justify-content:center;margin-bottom:12px;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7ae2cf" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      </div>
+      <div class="modal-eyebrow" style="color:var(--mint);">Digital Transformation · Customer Journey Design · Automation</div>
+      <div class="modal-title">Website implementation &amp; 100% digital customer journey</div>
+      <div class="modal-subtitle">Antaé · Montreux · 2022–2024</div>
+      <div class="modal-badges">
+        <span class="mbadge" style="border-color:rgba(7,122,125,0.4);color:var(--mint);background:rgba(7,122,125,0.1);">Requirements Translation</span>
+        <span class="mbadge" style="border-color:rgba(7,122,125,0.4);color:var(--mint);background:rgba(7,122,125,0.1);">Data Mapping</span>
+        <span class="mbadge" style="border-color:rgba(7,122,125,0.4);color:var(--mint);background:rgba(7,122,125,0.1);">Transmission Rules</span>
+        <span class="mbadge" style="border-color:rgba(7,122,125,0.4);color:var(--mint);background:rgba(7,122,125,0.1);">UAT</span>
+      </div>
+    </div>
+    <div class="modal-body">
+
+      <!-- ① CONTEXT -->
+      <div class="mblock">
+        <div class="mblock-title"><span class="mblock-dot" style="background:var(--teal);"></span>Context</div>
+        <div class="mblock-text">For a tailored school solution, our team took over the full contract lifecycle, including applications to the insurance. Since students were still applying through paper forms during on-site visits, we designed and implemented a fully digital membership journey to improve user experience and replace the manual process within a short delivery window before campus arrival.</div>
+      </div>
+
+      <!-- ② CHALLENGES -->
+      <div class="mblock">
+        <div class="mblock-title"><span class="mblock-dot" style="background:var(--teal);"></span>Challenges</div>
+        <div class="m-risk-grid-4">
+          <div class="m-risk-item" style="border-left-color:var(--teal);">
+            <div class="m-risk-head" style="color:var(--teal);">Tight deadlines</div>
+            <div class="m-risk-body">The project had tight deadlines and was based on a similar model already in place, but not an exact replica.</div>
+          </div>
+          <div class="m-risk-item" style="border-left-color:var(--navy);">
+            <div class="m-risk-head" style="color:var(--navy);">Journey design balance</div>
+            <div class="m-risk-body">Designing a customer journey that balanced operational efficiency and error prevention without making the application process too long or difficult to complete.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ③ APPROACH -->
+      <div class="mblock">
+        <div class="mblock-title"><span class="mblock-dot" style="background:var(--teal);"></span>Approach — 7 steps</div>
+        <style>
+          .ws-track{display:flex;align-items:center;gap:0;margin:12px 0 16px;}
+          .ws-line{flex:1;height:2px;background:rgba(37,49,77,0.15);}
+          .ws-line.ws-done{background:var(--navy);}
+          .ws-dot{width:32px;height:32px;border-radius:50%;border:2px solid rgba(37,49,77,0.25);background:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#8a9bb0;cursor:pointer;transition:all .2s;flex-shrink:0;position:relative;z-index:1;}
+          .ws-dot:hover{border-color:var(--navy);color:var(--navy);}
+          .ws-dot.ws-active{background:var(--navy);border-color:var(--navy);color:#fff;transform:scale(1.15);}
+          .ws-dot.ws-done{background:var(--navy);border-color:var(--navy);color:#fff;}
+          .ws-panel{border-radius:10px;border:1.5px solid rgba(37,49,77,0.18);background:rgba(37,49,77,0.03);padding:14px 16px;}
+          .ws-panel-title{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:8px;}
+          .ws-panel-body{font-size:12px;color:#4a5f78;line-height:1.65;}
+          .ws-nav{display:flex;align-items:center;justify-content:space-between;margin-top:12px;}
+          .ws-btn{font-size:12px;font-weight:600;color:var(--navy);background:none;border:1.5px solid rgba(37,49,77,0.25);border-radius:8px;padding:6px 14px;cursor:pointer;transition:all .15s;}
+          .ws-btn:hover{background:rgba(37,49,77,0.06);border-color:var(--navy);}
+          .ws-btn:disabled{opacity:0.3;cursor:default;}
+          .ws-count{font-size:11px;color:#8a9bb0;}
+        </style>
+        <div class="ws-track" id="ws-track"></div>
+        <div class="ws-panel">
+          <div class="ws-panel-title" id="ws-panel-title"></div>
+          <div class="ws-panel-body" id="ws-panel-body"></div>
+        </div>
+        <div class="ws-nav">
+          <button class="ws-btn" id="ws-prev" onclick="wsGo(wsCur-1)">← Prev</button>
+          <span class="ws-count" id="ws-count"></span>
+          <button class="ws-btn" id="ws-next" onclick="wsGo(wsCur+1)">Next →</button>
+        </div>
+        <script>
+        var wsSteps=[
+          {title:'Define product and workflow requirements',body:'Analysed the enrolment data model and aligned the digital journey with the existing insurer framework, while adapting the logic for plan variations, deductibles, and file outputs.'},
+          {title:'Reuse and configure the existing platform',body:'Built on an existing digital solution and adapted branding, content, and operational logic for the new individual product.'},
+          {title:'Align data mapping and transmission rules',body:'Configured field mapping and backend connectors so the captured data could be translated into the insurer\'s required format.'},
+          {title:'Set eligibility and compliance rules',body:'Distinguished between insurer-mandated fields, Swiss exemption requirements, and internal fields used for operational analysis.'},
+          {title:'Run UAT and regression testing',body:'Validated the end-to-end flow across browsers and devices, including linked fields, conditional field behavior and process stability. A reusable test script was also created for future releases.'},
+          {title:'Document the operating model',body:'Defined the enrollment procedure and renewal checkpoints to ensure the website displayed accurate, up-to-date information at renewal.'},
+          {title:'Optimise the customer journey',body:'Proposed rule-based improvements to reduce downstream errors and strengthen conversion, such as blocking invalid date combinations at the intake stage.'}
+        ];
+        var wsCur=0;
+        function wsBuild(){
+          var track=document.getElementById('ws-track');
+          track.innerHTML='';
+          for(var i=0;i<wsSteps.length;i++){
+            if(i>0){var l=document.createElement('div');l.className='ws-line'+(i<=wsCur?' ws-done':'');track.appendChild(l);}
+            var d=document.createElement('div');
+            d.className='ws-dot'+(i===wsCur?' ws-active':i<wsCur?' ws-done':'');
+            d.textContent=i+1;
+            (function(idx){d.onclick=function(){wsGo(idx);};})(i);
+            track.appendChild(d);
+          }
+        }
+        function wsRender(){
+          var s=wsSteps[wsCur];
+          document.getElementById('ws-panel-title').textContent=s.title;
+          document.getElementById('ws-panel-body').textContent=s.body;
+          document.getElementById('ws-count').textContent=(wsCur+1)+' / '+wsSteps.length;
+          document.getElementById('ws-prev').disabled=wsCur===0;
+          document.getElementById('ws-next').disabled=wsCur===wsSteps.length-1;
+          wsBuild();
+        }
+        function wsGo(idx){if(idx<0||idx>=wsSteps.length)return;wsCur=idx;wsRender();}
+        wsRender();
+        </script>
+
+        <!-- BPMN process flow -->
+        <div style="margin-top:16px;border-top:1px solid rgba(37,49,77,0.1);padding-top:12px;">
+          <div style="font-size:10.5px;font-weight:600;color:#8a9bb0;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;">End-to-end enrolment flow (BPMN)</div>
+          <div style="overflow-x:auto;">
+<svg width="100%" viewBox="0 0 780 430" role="img" xmlns="http://www.w3.org/2000/svg" style="min-width:520px;max-width:680px;">
+<defs>
+  <marker id="ba" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  <marker id="bt" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#077a7d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  <marker id="bn" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#25314d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  <marker id="br" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#c33" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs>
+<!-- POOL -->
+<rect x="1" y="1" width="778" height="420" rx="6" fill="none" stroke="#25314d" stroke-width="1.5"/>
+<rect x="1" y="1" width="22" height="420" rx="6" fill="#25314d"/>
+<text font-family="Tahoma,sans-serif" font-size="9" font-weight="700" fill="#7ae2cf" transform="translate(12,280) rotate(-90)" text-anchor="middle">Digital enrolment</text>
+<!-- LANE 1 STUDENT y1-135 -->
+<rect x="23" y="1" width="756" height="134" fill="#f4faf9"/>
+<rect x="23" y="1" width="44" height="134" fill="#e0f0ee"/>
+<text font-family="Tahoma,sans-serif" font-size="9" font-weight="700" fill="#104055" transform="translate(45,75) rotate(-90)" text-anchor="middle">Student</text>
+<line x1="23" y1="135" x2="779" y2="135" stroke="#b0ddd9" stroke-width="0.8"/>
+<!-- LANE 2 PLATFORM y135-305 -->
+<rect x="23" y="135" width="756" height="170" fill="#fff"/>
+<rect x="23" y="135" width="44" height="170" fill="#eef1f5"/>
+<text font-family="Tahoma,sans-serif" font-size="9" font-weight="700" fill="#25314d" transform="translate(45,225) rotate(-90)" text-anchor="middle">Platform / Antaé</text>
+<line x1="23" y1="305" x2="779" y2="305" stroke="#b0ddd9" stroke-width="0.8"/>
+<!-- LANE 3 INSURER y305-420 — distinct colour -->
+<rect x="23" y="305" width="756" height="115" fill="#f0f4f8"/>
+<rect x="23" y="305" width="44" height="115" fill="#d8e4ef"/>
+<text font-family="Tahoma,sans-serif" font-size="9" font-weight="700" fill="#25314d" transform="translate(45,368) rotate(-90)" text-anchor="middle">Insurer / Backend</text>
+
+<!-- ══ LANE 1 STUDENT ══ -->
+<circle cx="78" cy="65" r="11" fill="#e6f5f2" stroke="#077a7d" stroke-width="1.5"/>
+<text font-family="Tahoma,sans-serif" font-size="7" fill="#077a7d" text-anchor="middle" x="78" y="87">Start</text>
+<line x1="89" y1="65" x2="100" y2="65" stroke="#077a7d" stroke-width="1" marker-end="url(#ba)"/>
+<!-- Visit website -->
+<rect x="100" y="49" width="82" height="32" rx="4" fill="#fff" stroke="#077a7d" stroke-width="1"/>
+<text font-family="Tahoma,sans-serif" font-size="8" font-weight="700" fill="#25314d" text-anchor="middle" x="141" y="62">Visit enrolment</text>
+<text font-family="Tahoma,sans-serif" font-size="7.5" fill="#25314d" text-anchor="middle" x="141" y="74">website</text>
+<line x1="182" y1="65" x2="204" y2="65" stroke="#077a7d" stroke-width="1" marker-end="url(#ba)"/>
+<!-- Gateway cx=218 -->
+<polygon points="204,65 218,51 232,65 218,79" fill="#fffce8" stroke="#b8900a" stroke-width="1.2"/>
+<text font-family="Tahoma,sans-serif" font-size="7" fill="#7a5a00" text-anchor="middle" x="218" y="68">Elig.?</text>
+<!-- NO up then right -->
+<line x1="218" y1="51" x2="218" y2="28" stroke="#c33" stroke-width="1.1"/>
+<line x1="218" y1="28" x2="264" y2="28" stroke="#c33" stroke-width="1.1" marker-end="url(#br)"/>
+<text font-family="Tahoma,sans-serif" font-size="7" font-weight="700" fill="#c33" text-anchor="middle" x="241" y="23">No</text>
+<circle cx="276" cy="28" r="10" fill="#fde8e0" stroke="#a33" stroke-width="2"/>
+<circle cx="276" cy="28" r="6" fill="#c33"/>
+<text font-family="Tahoma,sans-serif" font-size="7" fill="#7a0000" text-anchor="middle" x="276" y="49">End</text>
+<!-- YES down then right -->
+<text font-family="Tahoma,sans-serif" font-size="7" font-weight="700" fill="#077a7d" x="222" y="92">Yes</text>
+<line x1="218" y1="79" x2="218" y2="99" stroke="#077a7d" stroke-width="1"/>
+<line x1="218" y1="99" x2="260" y2="99" stroke="#077a7d" stroke-width="1" marker-end="url(#ba)"/>
+<!-- Complete application -->
+<rect x="260" y="83" width="82" height="32" rx="4" fill="#fff" stroke="#077a7d" stroke-width="1"/>
+<text font-family="Tahoma,sans-serif" font-size="8" font-weight="700" fill="#25314d" text-anchor="middle" x="301" y="96">Complete</text>
+<text font-family="Tahoma,sans-serif" font-size="7.5" fill="#25314d" text-anchor="middle" x="301" y="108">application</text>
+<!-- Complete → ConfirmRx sequence -->
+<line x1="342" y1="99" x2="370" y2="99" stroke="#077a7d" stroke-width="1"/>
+<line x1="370" y1="99" x2="370" y2="65" stroke="#077a7d" stroke-width="1"/>
+<line x1="370" y1="65" x2="400" y2="65" stroke="#077a7d" stroke-width="1" marker-end="url(#ba)"/>
+<!-- Receive confirmation -->
+<rect x="400" y="49" width="94" height="32" rx="4" fill="#fff" stroke="#077a7d" stroke-width="1"/>
+<text font-family="Tahoma,sans-serif" font-size="8" font-weight="700" fill="#25314d" text-anchor="middle" x="447" y="62">Receive confirmation</text>
+<text font-family="Tahoma,sans-serif" font-size="7.5" fill="#5b6e85" text-anchor="middle" x="447" y="74">application received</text>
+<!-- ConfirmRx → Welcome -->
+<line x1="494" y1="65" x2="520" y2="65" stroke="#077a7d" stroke-width="1" marker-end="url(#ba)"/>
+<!-- Receive welcome -->
+<rect x="520" y="49" width="94" height="32" rx="4" fill="#e6f5f2" stroke="#077a7d" stroke-width="1"/>
+<text font-family="Tahoma,sans-serif" font-size="8" font-weight="700" fill="#104055" text-anchor="middle" x="567" y="62">Receive welcome</text>
+<text font-family="Tahoma,sans-serif" font-size="7.5" fill="#077a7d" text-anchor="middle" x="567" y="74">package + membership</text>
+<!-- Welcome → End -->
+<line x1="614" y1="65" x2="634" y2="65" stroke="#104055" stroke-width="1" marker-end="url(#ba)"/>
+<circle cx="646" cy="65" r="11" fill="#104055" stroke="#104055" stroke-width="1.5"/>
+<circle cx="646" cy="65" r="7" fill="none" stroke="#7ae2cf" stroke-width="2"/>
+<text font-family="Tahoma,sans-serif" font-size="7" fill="#104055" text-anchor="middle" x="646" y="87">End</text>
+
+<!-- ══ LANE 2 PLATFORM ══ -->
+<!-- Display form -->
+<rect x="100" y="152" width="82" height="38" rx="4" fill="#fff" stroke="#25314d" stroke-width="1"/>
+<text font-family="Tahoma,sans-serif" font-size="8" font-weight="700" fill="#25314d" text-anchor="middle" x="141" y="166">Display form</text>
+<text font-family="Tahoma,sans-serif" font-size="7" fill="#5b6e85" text-anchor="middle" x="141" y="177">plan &amp; eligibility</text>
+<text font-family="Tahoma,sans-serif" font-size="7" fill="#5b6e85" text-anchor="middle" x="141" y="186">rules</text>
+<text font-family="Tahoma,sans-serif" font-size="9" fill="#077a7d" x="172" y="154">⚙</text>
+<line x1="182" y1="171" x2="202" y2="171" stroke="#25314d" stroke-width="1" marker-end="url(#ba)"/>
+<!-- Validate fields -->
+<rect x="202" y="155" width="82" height="32" rx="4" fill="#fff" stroke="#25314d" stroke-width="1"/>
+<text font-family="Tahoma,sans-serif" font-size="8" font-weight="700" fill="#25314d" text-anchor="middle" x="243" y="169">Validate fields</text>
+<text font-family="Tahoma,sans-serif" font-size="7" fill="#5b6e85" text-anchor="middle" x="243" y="181">conditional logic</text>
+<text font-family="Tahoma,sans-serif" font-size="9" fill="#077a7d" x="272" y="157">⚙</text>
+<line x1="284" y1="171" x2="304" y2="171" stroke="#25314d" stroke-width="1" marker-end="url(#ba)"/>
+<!-- Map & transform -->
+<rect x="304" y="155" width="86" height="32" rx="4" fill="#fff" stroke="#25314d" stroke-width="1"/>
+<text font-family="Tahoma,sans-serif" font-size="8" font-weight="700" fill="#25314d" text-anchor="middle" x="347" y="169">Map &amp; transform</text>
+<text font-family="Tahoma,sans-serif" font-size="7" fill="#5b6e85" text-anchor="middle" x="347" y="181">to insurer format</text>
+<text font-family="Tahoma,sans-serif" font-size="9" fill="#077a7d" x="378" y="157">⚙</text>
+<!-- Map → SFTP down -->
+<line x1="347" y1="187" x2="347" y2="238" stroke="#25314d" stroke-width="1" marker-end="url(#ba)"/>
+<!-- SFTP upload -->
+<rect x="304" y="238" width="86" height="32" rx="4" fill="#fff" stroke="#25314d" stroke-width="1"/>
+<text font-family="Tahoma,sans-serif" font-size="8" font-weight="700" fill="#25314d" text-anchor="middle" x="347" y="252">SFTP upload</text>
+<text font-family="Tahoma,sans-serif" font-size="7" fill="#5b6e85" text-anchor="middle" x="347" y="264">file to insurer</text>
+<text font-family="Tahoma,sans-serif" font-size="9" fill="#077a7d" x="378" y="240">⚙</text>
+<!-- SFTP → Send confirmation right -->
+<line x1="390" y1="254" x2="410" y2="254" stroke="#25314d" stroke-width="1" marker-end="url(#ba)"/>
+<!-- Send confirmation email -->
+<rect x="410" y="238" width="86" height="32" rx="4" fill="#fff" stroke="#25314d" stroke-width="1"/>
+<text font-family="Tahoma,sans-serif" font-size="8" font-weight="700" fill="#25314d" text-anchor="middle" x="453" y="252">Send confirmation</text>
+<text font-family="Tahoma,sans-serif" font-size="7" fill="#5b6e85" text-anchor="middle" x="453" y="264">email to student</text>
+<text font-family="Tahoma,sans-serif" font-size="9" fill="#077a7d" x="484" y="240">⚙</text>
+
+<!-- ══ LANE 3 INSURER ══ -->
+<!-- Receive SFTP -->
+<rect x="304" y="320" width="86" height="32" rx="4" fill="#fff" stroke="#3d4e63" stroke-width="1"/>
+<text font-family="Tahoma,sans-serif" font-size="8" font-weight="700" fill="#25314d" text-anchor="middle" x="347" y="334">Receive SFTP file</text>
+<text font-family="Tahoma,sans-serif" font-size="7" fill="#5b6e85" text-anchor="middle" x="347" y="346">compliance check</text>
+<text font-family="Tahoma,sans-serif" font-size="9" fill="#077a7d" x="378" y="322">⚙</text>
+<line x1="390" y1="336" x2="490" y2="336" stroke="#3d4e63" stroke-width="1" marker-end="url(#ba)"/>
+<!-- Create policy -->
+<rect x="490" y="320" width="86" height="32" rx="4" fill="#e6f5f2" stroke="#077a7d" stroke-width="1"/>
+<text font-family="Tahoma,sans-serif" font-size="8" font-weight="700" fill="#104055" text-anchor="middle" x="533" y="334">Create policy</text>
+<text font-family="Tahoma,sans-serif" font-size="7" fill="#077a7d" text-anchor="middle" x="533" y="346">send welcome package</text>
+<text font-family="Tahoma,sans-serif" font-size="9" fill="#077a7d" x="564" y="322">⚙</text>
+
+<!-- ══ MESSAGE FLOWS ══ -->
+<!-- Visit → Display form straight down -->
+<line x1="141" y1="81" x2="141" y2="152" stroke="#077a7d" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#bt)"/>
+<!-- Complete → Validate (down to boundary, left to cx=243, down into validate) -->
+<line x1="301" y1="115" x2="301" y2="127" stroke="#077a7d" stroke-width="1" stroke-dasharray="4,3"/>
+<line x1="301" y1="127" x2="243" y2="127" stroke="#077a7d" stroke-width="1" stroke-dasharray="4,3"/>
+<line x1="243" y1="127" x2="243" y2="155" stroke="#077a7d" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#bt)"/>
+<!-- SFTP → Receive SFTP straight down -->
+<line x1="347" y1="270" x2="347" y2="320" stroke="#25314d" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#bn)"/>
+<!-- Send confirmation → Receive confirmation straight up -->
+<line x1="453" y1="238" x2="453" y2="105" stroke="#077a7d" stroke-width="1" stroke-dasharray="4,3"/>
+<line x1="453" y1="105" x2="447" y2="105" stroke="#077a7d" stroke-width="1" stroke-dasharray="4,3"/>
+<line x1="447" y1="105" x2="447" y2="81" stroke="#077a7d" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#bt)"/>
+<!-- Create policy → Receive welcome straight up -->
+<line x1="567" y1="320" x2="567" y2="81" stroke="#077a7d" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#bt)"/>
+
+<!-- LEGEND -->
+<line x1="68" y1="400" x2="84" y2="400" stroke="#077a7d" stroke-width="1" marker-end="url(#ba)"/>
+<text font-family="Tahoma,sans-serif" font-size="7.5" fill="#3d4e63" x="87" y="403">Sequence</text>
+<line x1="156" y1="400" x2="172" y2="400" stroke="#077a7d" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#bt)"/>
+<text font-family="Tahoma,sans-serif" font-size="7.5" fill="#3d4e63" x="175" y="403">Message</text>
+<text font-family="Tahoma,sans-serif" font-size="10" fill="#077a7d" x="236" y="405">⚙</text>
+<text font-family="Tahoma,sans-serif" font-size="7.5" fill="#3d4e63" x="248" y="403">Automated</text>
+<polygon points="320,403 329,394 338,403 329,412" fill="#fffce8" stroke="#b8900a" stroke-width="1"/>
+<text font-family="Tahoma,sans-serif" font-size="7.5" fill="#3d4e63" x="342" y="403">Decision</text>
+<circle cx="404" cy="401" r="6" fill="#fde8e0" stroke="#a33" stroke-width="1.5"/>
+<circle cx="404" cy="401" r="3" fill="#c33"/>
+<text font-family="Tahoma,sans-serif" font-size="7.5" fill="#3d4e63" x="413" y="404">Not eligible</text>
+<circle cx="490" cy="401" r="6" fill="#104055" stroke="#104055" stroke-width="1.5"/>
+<circle cx="490" cy="401" r="3" fill="none" stroke="#7ae2cf" stroke-width="1.5"/>
+<text font-family="Tahoma,sans-serif" font-size="7.5" fill="#3d4e63" x="499" y="404">Enrolled</text>
+</svg>
+          </div>
+        </div>
+      </div>
+      <!-- ④ OUTCOMES -->
+      <div class="mblock">
+        <div class="mblock-title"><span class="mblock-dot" style="background:var(--teal);"></span>Outcome</div>
+        <div class="puz-grid">
+          <div class="puz-piece" style="background:rgba(16,64,85,0.05);border-color:rgba(16,64,85,0.18);">
+            <div class="puz-piece-icon" style="background:rgba(16,64,85,0.1);border:1px solid rgba(16,64,85,0.2);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#104055" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="16 12 12 8 8 12"/><line x1="12" y1="16" x2="12" y2="8"/></svg>
+            </div>
+            <div class="puz-piece-title" style="color:var(--dteal);">Digital enrolment live</div>
+            <div class="puz-piece-desc" style="color:var(--grey);">Manual paper forms replaced by a fully digital application flow, improving operational efficiency.</div>
+          </div>
+          <div class="puz-piece" style="background:rgba(7,122,125,0.05);border-color:rgba(7,122,125,0.2);">
+            <div class="puz-piece-icon" style="background:rgba(7,122,125,0.1);border:1px solid rgba(7,122,125,0.2);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#077a7d" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <div class="puz-piece-title" style="color:var(--teal);">Seamless journey on deadline</div>
+            <div class="puz-piece-desc" style="color:var(--grey);">Went live before campus arrival, creating a smoother experience for students.</div>
+          </div>
+          <div class="puz-piece" style="background:rgba(7,122,125,0.05);border-color:rgba(7,122,125,0.2);">
+            <div class="puz-piece-icon" style="background:rgba(7,122,125,0.1);border:1px solid rgba(7,122,125,0.2);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#077a7d" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            </div>
+            <div class="puz-piece-title" style="color:var(--teal);">Reusable framework</div>
+            <div class="puz-piece-desc" style="color:var(--grey);">Documented process reusable for future launches, upgrades, and compliance updates.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑤ KEY INSIGHT -->
+      <div class="m-insight">
+        <div class="m-insight-label">Key insight</div>
+        <div class="m-insight-text">The main challenge was not building a website, but configuring an intake workflow that could handle plan variations, data transmission, and compliance rules — while remaining simple enough for a student to complete in minutes.</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     MODAL 4: Project Simply America
+═══════════════════════════════════════════════════ -->
+<div id="m4" class="modal-overlay" onclick="if(event.target===this)closeModal('m4')">
+  <div class="modal-inner">
+    <div class="modal-head" style="background:linear-gradient(135deg,var(--dteal) 0%,#0a2e30 100%);">
+      <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--teal),var(--mint));"></div>
+      <button class="modal-close" onclick="closeModal('m4')">✕</button>
+      <div style="width:44px;height:44px;border-radius:12px;background:rgba(7,122,125,0.35);border:1px solid rgba(122,226,207,0.3);display:flex;align-items:center;justify-content:center;margin-bottom:12px;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7ae2cf" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </div>
+      <div class="modal-eyebrow" style="color:var(--mint);">Cross-Functional – Process Mapping – US Market – Operational Alignment</div>
+      <div class="modal-title">Project Simply America — US Corridor Operational Model</div>
+      <div class="modal-subtitle">April International Care France – Paris – 2022–2024</div>
+      <div class="modal-badges">
+        <span class="mbadge" style="border-color:rgba(7,122,125,0.4);color:var(--mint);background:rgba(7,122,125,0.1);">Cross-functional Leadership</span>
+        <span class="mbadge" style="border-color:rgba(7,122,125,0.4);color:var(--mint);background:rgba(7,122,125,0.1);">Process Mapping</span>
+        <span class="mbadge" style="border-color:rgba(7,122,125,0.4);color:var(--mint);background:rgba(7,122,125,0.1);">US TPA Management</span>
+        <span class="mbadge" style="border-color:rgba(7,122,125,0.4);color:var(--mint);background:rgba(7,122,125,0.1);">Case Management</span>
+        <span class="mbadge" style="border-color:rgba(7,122,125,0.4);color:var(--mint);background:rgba(7,122,125,0.1);">High-Cost Claims Governance</span>
+      </div>
+    </div>
+    <div class="modal-body">
+
+      <!-- ① CONTEXT -->
+      <div class="mblock">
+        <div class="mblock-title"><span class="mblock-dot" style="background:var(--teal);"></span>Context — the most complex market in the portfolio</div>
+        <div class="mblock-text">The US corridor was the most operationally complex and financially sensitive part of the portfolio.<br><br>The American healthcare system — with its PPO networks, CVS/Caremark set up, CPT and DRG billing codes, and in-network/out-of-network cost differentials — operates differently from IPMI markets we might be more used to.<br><br>Paris, Mexico, and the US TPA were working in silos, which created mistrust, confusion over responsibilities, gaps in service quality, inconsistent handling of high-cost cases and poor coordination across the customer and claims lifecycle.</div>
+      </div>
+
+      <!-- ② CHALLENGE -->
+      <div class="mblock">
+        <div class="mblock-title"><span class="mblock-dot" style="background:var(--teal);"></span>Challenge</div>
+        <div class="m-risk-grid-4">
+          <div class="m-risk-item" style="border-left-color:var(--teal);">
+            <div class="m-risk-head" style="color:var(--teal);">Sales &amp; Onboarding</div>
+            <div class="m-risk-body"><ul>
+              <li>Product not always understood and explained correctly to the client</li>
+              <li>No standardized onboarding process for new clients</li>
+              <li>Setup delays reduced onboarding efficiency and delayed access to care, direct billing, and client satisfaction</li>
+            </ul></div>
+          </div>
+          <div class="m-risk-item" style="border-left-color:var(--navy);">
+            <div class="m-risk-head" style="color:var(--navy);">Teams Coordination</div>
+            <div class="m-risk-body"><ul>
+              <li>Key operational flows not clearly owned or understood</li>
+              <li>Lack of a shared view across teams</li>
+              <li>Mistrust between teams affecting day-to-day collaboration</li>
+            </ul></div>
+          </div>
+          <div class="m-risk-item" style="border-left-color:var(--dteal);">
+            <div class="m-risk-head" style="color:var(--dteal);">Case &amp; Claims Handling</div>
+            <div class="m-risk-body"><ul>
+              <li>Pharmacy card and PPO network not well integrated in practice</li>
+              <li>Open invoices not consistently reconciled between entities</li>
+              <li>No clear escalation path for complex or high-cost cases</li>
+            </ul></div>
+          </div>
+          <div class="m-risk-item" style="border-left-color:var(--grey);">
+            <div class="m-risk-head" style="color:var(--grey);">Cost &amp; Resilience</div>
+            <div class="m-risk-body"><ul>
+              <li>High-cost claims not subject to a structured review process</li>
+              <li>BCP mapping incomplete — operational resilience at risk</li>
+              <li>Members not systematically steered toward lower-cost care options</li>
+            </ul></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ③ APPROACH -->
+      <div class="mblock">
+        <div class="mblock-title"><span class="mblock-dot" style="background:var(--teal);"></span>Approach — two years, three teams, end-to-end</div>
+        <style>
+          .sa-track{display:flex;align-items:center;gap:0;margin:12px 0 16px;}
+          .sa-line{flex:1;height:2px;background:rgba(7,122,125,0.18);}
+          .sa-line.sa-done{background:var(--teal);}
+          .sa-dot{width:32px;height:32px;border-radius:50%;border:2px solid rgba(7,122,125,0.3);background:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#8a9bb0;cursor:pointer;transition:all .2s;flex-shrink:0;position:relative;z-index:1;}
+          .sa-dot:hover{border-color:var(--teal);color:var(--teal);}
+          .sa-dot.sa-active{background:var(--teal);border-color:var(--teal);color:#fff;transform:scale(1.15);}
+          .sa-dot.sa-done{background:var(--teal);border-color:var(--teal);color:#fff;}
+          .sa-panel{border-radius:10px;border:1.5px solid rgba(7,122,125,0.25);background:rgba(7,122,125,0.04);padding:14px 16px;}
+          .sa-panel-title{font-size:13px;font-weight:600;color:var(--teal);margin-bottom:8px;}
+          .sa-panel-body{font-size:12px;color:#4a5f78;line-height:1.65;}
+          .sa-nav{display:flex;align-items:center;justify-content:space-between;margin-top:12px;}
+          .sa-btn{font-size:12px;font-weight:600;color:var(--teal);background:none;border:1.5px solid rgba(7,122,125,0.3);border-radius:8px;padding:6px 14px;cursor:pointer;transition:all .15s;}
+          .sa-btn:hover{background:rgba(7,122,125,0.08);border-color:var(--teal);}
+          .sa-btn:disabled{opacity:0.3;cursor:default;}
+          .sa-count{font-size:11px;color:#8a9bb0;}
+        </style>
+        <div class="sa-track" id="sa-track"></div>
+        <div class="sa-panel">
+          <div class="sa-panel-title" id="sa-panel-title"></div>
+          <div class="sa-panel-body" id="sa-panel-body"></div>
+        </div>
+        <div class="sa-nav">
+          <button class="sa-btn" id="sa-prev" onclick="saGo(saCur-1)">← Prev</button>
+          <span class="sa-count" id="sa-count"></span>
+          <button class="sa-btn" id="sa-next" onclick="saGo(saCur+1)">Next →</button>
+        </div>
+        <script>
+        var saSteps=[
+          {title:'Process mapping across all stakeholders',body:'Worked closely with each team (Paris, Mexico, US TPA) to map the end-to-end workflows and understand pain points, identify what would work better, and document simplified workflows, including onboarding, pharmacy/PPO integration, contract lifecycle, case management, claims handling and BCP. Clarified roles and escalation points, and rebuilt operational alignment.'},
+          {title:'High-cost claim review procedure',body:'Set up a high-cost claim review process aligned with insurer regulations and reinstated weekly meetings across the three entities to manage high-cost cases. This added a governance layer for the portfolio\'s most financially exposed claims.'},
+          {title:'Client database accuracy',body:'Collaborated with IT to reconcile the client database across entities and intermediaries, harmonizing information and ensuring accuracy in line with our delegation of authority model. The aim was to reduce payment discrepancies and operational issues caused by inconsistent updates (such as claims rework). We also established a weekly update process for new members, plan changes, and cancellations to keep the database current.'},
+          {title:'Invoice reconciliation',body:'Reconciled invoices to determine amounts owed both to and by the partner, resolving outstanding balances and reducing financial discrepancies.'},
+          {title:'Member care navigation',body:'Partnered with Marketing to develop tailored member communications that explained the medical care journey and guided members toward cost-effective care choices in line with their plan, the network, and the cost-management strategy.'},
+          {title:'In-house training',body:'Developed an 80-page training manual on the partner, the US healthcare market, intermediary roles, and our product, which was given to all employees working on the US market and integrated into new-employee onboarding.'}
+        ];
+        var saCur=0;
+        function saBuild(){
+          var track=document.getElementById('sa-track');
+          track.innerHTML='';
+          for(var i=0;i<saSteps.length;i++){
+            if(i>0){var l=document.createElement('div');l.className='sa-line'+(i<=saCur?' sa-done':'');track.appendChild(l);}
+            var d=document.createElement('div');
+            d.className='sa-dot'+(i===saCur?' sa-active':i<saCur?' sa-done':'');
+            d.textContent=i+1;
+            (function(idx){d.onclick=function(){saGo(idx);};})(i);
+            track.appendChild(d);
+          }
+        }
+        function saRender(){
+          var s=saSteps[saCur];
+          document.getElementById('sa-panel-title').textContent=s.title;
+          document.getElementById('sa-panel-body').textContent=s.body;
+          document.getElementById('sa-count').textContent=(saCur+1)+' / '+saSteps.length;
+          document.getElementById('sa-prev').disabled=saCur===0;
+          document.getElementById('sa-next').disabled=saCur===saSteps.length-1;
+          saBuild();
+        }
+        function saGo(idx){if(idx<0||idx>=saSteps.length)return;saCur=idx;saRender();}
+        saRender();
+        </script>
+      </div>
+
+      <!-- ④ OUTCOMES -->
+      <div class="mblock">
+        <div class="mblock-title"><span class="mblock-dot" style="background:var(--teal);"></span>Outcomes</div>
+        <div class="puz-grid">
+          <div class="puz-piece" style="background:rgba(16,64,85,0.05);border-color:rgba(16,64,85,0.18);">
+            <div class="puz-piece-icon" style="background:rgba(16,64,85,0.1);border:1px solid rgba(16,64,85,0.2);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#104055" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+            </div>
+            <div class="puz-piece-title" style="color:var(--dteal);">Operational dialogue restored</div>
+            <div class="puz-piece-desc" style="color:var(--grey);">Paris, Mexico, and the US TPA moved from siloed working to a shared follow-the-sun model.</div>
+          </div>
+          <div class="puz-piece" style="background:rgba(7,122,125,0.05);border-color:rgba(7,122,125,0.2);">
+            <div class="puz-piece-icon" style="background:rgba(7,122,125,0.1);border:1px solid rgba(7,122,125,0.2);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#077a7d" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            </div>
+            <div class="puz-piece-title" style="color:var(--teal);">Clearer US operating model</div>
+            <div class="puz-piece-desc" style="color:var(--grey);">Documented workflows and responsibilities helped each team work more effectively.</div>
+          </div>
+          <div class="puz-piece" style="background:rgba(7,122,125,0.05);border-color:rgba(7,122,125,0.2);">
+            <div class="puz-piece-icon" style="background:rgba(7,122,125,0.1);border:1px solid rgba(7,122,125,0.2);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#077a7d" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div class="puz-piece-title" style="color:var(--teal);">Better case handling</div>
+            <div class="puz-piece-desc" style="color:var(--grey);">Improved coordination reduced case management gaps and improved member service consistency.</div>
+          </div>
+          <div class="puz-piece" style="background:rgba(16,64,85,0.05);border-color:rgba(16,64,85,0.18);">
+            <div class="puz-piece-icon" style="background:rgba(16,64,85,0.1);border:1px solid rgba(16,64,85,0.2);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#104055" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div class="puz-piece-title" style="color:var(--dteal);">High-cost claims governance</div>
+            <div class="puz-piece-desc" style="color:var(--grey);">Structured review process aligned with insurer regulations for the most financially exposed claims.</div>
+          </div>
+          <div class="puz-piece" style="background:rgba(16,64,85,0.05);border-color:rgba(16,64,85,0.18);">
+            <div class="puz-piece-icon" style="background:rgba(16,64,85,0.1);border:1px solid rgba(16,64,85,0.2);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#104055" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+            </div>
+            <div class="puz-piece-title" style="color:var(--dteal);">Stronger operational resilience</div>
+            <div class="puz-piece-desc" style="color:var(--grey);">BCP mapping and critical flows updated, database maintained, reducing operational risk.</div>
+          </div>
+          <div class="puz-piece" style="background:rgba(7,122,125,0.05);border-color:rgba(7,122,125,0.2);">
+            <div class="puz-piece-icon" style="background:rgba(7,122,125,0.1);border:1px solid rgba(7,122,125,0.2);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#077a7d" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+            </div>
+            <div class="puz-piece-title" style="color:var(--teal);">Improved care navigation</div>
+            <div class="puz-piece-desc" style="color:var(--grey);">Member communications and team training improved guidance on coverage and the US healthcare system.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑤ KEY INSIGHT -->
+      <div class="m-insight">
+        <div class="m-insight-label">Key insight</div>
+        <div class="m-insight-text">The portfolio's biggest challenge was not the US market itself, but the lack of a shared operating model around it. Once roles, flows, data, governance, training, and member guidance were aligned, service quality and cost control improved together.</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer-strip">
+  <div class="footer-brand">M<span>.</span>Bénabès</div>
+  <div class="footer-contacts">
+    <div class="footer-contact-row">
+      <a href="mailto:benabesmarjolaine@gmail.com" class="footer-contact-item">
+        <span class="footer-contact-icon">✉</span>
+        benabesmarjolaine@gmail.com
+      </a>
+      <a href="tel:+41774369275" class="footer-contact-item">
+        <span class="footer-contact-icon">📞</span>
+        +41 (0)77 436 92 75
+      </a>
+      <a href="https://www.linkedin.com/in/marjolaine-benabes" target="_blank" rel="noopener" class="footer-contact-item">
+        <span class="footer-contact-icon" style="font-size:10px; font-weight:700; font-family:'DM Mono',monospace;">in</span>
+        LinkedIn
+      </a>
+    </div>
+    <div class="footer-location">Vevey, Switzerland · <span style="color:var(--mint); font-weight:500;">Open to opportunities</span></div>
+  </div>
+</footer>
+
+<script>
+  // ── HERO UNDERLINE ──
+  setTimeout(() => document.getElementById('hero-underline').classList.add('animate'), 200);
+
+  // ── WORLD MAP CANVAS ──
+  (function() {
+    const canvas = document.getElementById('hero-map-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const MINT = '#7ae2cf';
+
+    function resize() {
+      const strip = canvas.parentElement;
+      canvas.width = strip.offsetWidth;
+      canvas.height = strip.offsetHeight;
+    }
+    resize();
+    window.addEventListener('resize', () => { resize(); });
+
+    const dots = [
+      [2,49],[0,51],[13,52],[10,54],[14,50],[16,48],[2,47],[7,47],[8,46],[9,47],[10,48],[12,48],[14,48],[18,47],[19,48],[21,48],[23,46],[25,44],[26,44],[28,41],[29,40],[27,38],[28,37],[24,38],[22,38],[20,39],[19,40],[15,38],[13,38],[12,42],[12,44],[14,45],[16,46],[13,46],[11,44],[11,45],[7,44],[3,44],[2,43],[-3,40],[-8,40],[-9,39],[-8,37],[-5,36],[2,36],[10,37],[12,37],[15,37],[16,38],[20,42],[22,42],[24,42],[24,40],[26,40],[28,39],[30,50],[32,50],[34,49],[36,49],[38,48],[40,47],[30,60],[27,60],[25,61],[23,60],[20,63],[18,63],[15,63],[14,65],[18,70],[25,65],[28,60],[30,58],[27,57],[25,55],[22,55],[19,54],[17,52],[15,50],[12,50],[8,48],[5,51],[3,51],[4,52],[5,53],[7,53],[9,53],[12,54],[15,54],[18,54],[20,54],[22,54],[14,53],[16,51],[18,52],[21,50],[25,54],[28,54],[30,56],[32,55],[37,55],[39,55],[42,54],[44,52],[46,51],[48,50],[50,48],
+      [-17,14],[-15,12],[-12,10],[-10,8],[-8,6],[-5,5],[-2,5],[0,5],[2,6],[4,6],[6,5],[8,4],[10,4],[12,5],[14,6],[16,6],[18,4],[20,4],[22,4],[24,2],[26,1],[28,0],[30,-1],[32,-2],[34,-4],[36,-3],[38,-4],[40,-2],[42,2],[44,8],[42,12],[38,14],[36,16],[34,16],[32,14],[30,12],[28,12],[26,14],[24,14],[22,16],[20,18],[18,18],[16,18],[14,16],[12,14],[10,12],[8,10],[10,8],[12,8],[14,8],[16,6],[18,4],[20,2],[22,-2],[24,-6],[26,-8],[28,-10],[30,-14],[32,-18],[34,-20],[36,-22],[34,-26],[32,-28],[30,-30],[28,-32],[26,-34],[24,-34],[20,-30],[18,-26],[16,-22],[14,-18],[12,-16],[10,-12],[8,-8],
+      [44,40],[46,42],[48,44],[50,44],[52,44],[54,42],[56,40],[58,38],[60,36],[62,34],[64,32],[66,30],[68,28],[70,26],[72,24],[74,22],[76,20],[78,18],[80,16],[82,14],[84,12],[86,14],[88,16],[90,18],[92,22],[94,24],[96,22],[98,20],[100,18],[102,16],[104,14],[106,12],[108,10],[110,12],[112,14],[114,16],[116,18],[118,20],[120,22],[122,24],[124,26],[126,28],[128,30],[130,32],[132,34],[134,36],[136,38],[138,40],[140,36],[142,34],[140,30],[138,26],[136,22],[134,18],[132,14],[120,30],[118,34],[116,38],[114,42],[112,46],[110,48],[108,50],[106,52],[104,54],[102,56],[100,58],[98,60],[60,16],[62,14],[64,12],[66,10],[68,8],[70,10],[60,40],[62,38],[64,36],[66,34],[68,32],[70,30],[72,28],[74,26],[76,24],[78,22],[80,20],[82,18],[84,16],[86,18],[88,20],[90,22],[92,24],[94,26],[96,28],[98,30],[100,32],[102,34],[104,36],[106,38],[108,40],[110,42],[112,44],[114,46],[116,44],[118,42],[120,40],[122,38],[124,36],[126,34],[128,32],[130,30],[132,28],
+      [-70,-10],[-68,-8],[-66,-6],[-64,-4],[-62,-2],[-60,0],[-58,2],[-56,4],[-54,6],[-52,4],[-50,2],[-48,0],[-46,-2],[-44,-4],[-42,-6],[-40,-8],[-38,-10],[-36,-12],[-34,-14],[-36,-16],[-38,-18],[-40,-20],[-42,-22],[-44,-24],[-46,-24],[-48,-26],[-50,-28],[-52,-30],[-54,-32],[-56,-34],[-58,-36],[-60,-38],[-62,-40],[-64,-42],[-66,-44],[-68,-46],[-70,-48],[-80,24],[-82,26],[-84,26],[-86,24],[-88,22],[-90,20],[-92,18],[-94,16],[-96,14],[-98,12],[-100,10],[-102,10],[-104,12],[-106,14],[-108,16],[-110,18],[-112,20],[-114,22],[-116,24],[-118,26],[-120,28],[-122,30],[-124,32],[-80,36],[-78,38],[-76,40],[-74,42],[-72,44],[-70,46],[-68,48],[-66,50],[-64,48],[-62,46],[-60,44],[-58,42],[-56,40],[-72,50],[-74,52],[-76,54],[-78,56],[-80,56],[-82,50],[-84,46],[-86,44],[-88,42],[-90,40],[-92,38],[-94,36],[-96,34],[-98,32],[-100,30],[-102,28],[-104,26],[-106,22],[-108,20],[-110,16],[-112,14],[-114,10],[-116,8],[-118,4],[-120,2],
+      [114,-22],[116,-24],[118,-26],[120,-28],[122,-26],[124,-24],[126,-22],[128,-20],[130,-18],[132,-16],[134,-14],[136,-14],[138,-16],[140,-18],[142,-20],[144,-22],[146,-24],[148,-26],[150,-28],[152,-26],[154,-24],[152,-22],[150,-20],[148,-18],[146,-16],[144,-14],[142,-12],[140,-14],[138,-18],[136,-22],[134,-26],[132,-30],[130,-32],[136,-34],[138,-32],[140,-30],[142,-28],[144,-26],[146,-28],[148,-30],[150,-32],[152,-30],[154,-28],[170,-44],[172,-42],[174,-40],[176,-38]
+    ];
+
+    const cities = [
+      [2.35,48.85],[7.45,46.95],[-6.26,53.33],[103.82,1.35],[-73.93,40.73],[37.62,55.75],[31.25,30.06],[72.88,19.08],[139.69,35.69],[-43.17,-22.91],[18.42,-33.93],[151.21,-33.87]
+    ];
+    const connections = [[0,1],[1,2],[0,2],[0,3],[0,4],[1,3],[2,4],[0,6],[3,8],[1,7],[5,8],[4,9],[6,10],[3,11]];
+
+    function project(lon, lat) {
+      const W = canvas.width, H = canvas.height;
+      return [(lon + 180) / 360 * W, (90 - lat) / 180 * H];
+    }
+
+    let animProgress = connections.map(() => Math.random());
+
+    function draw() {
+      if (!canvas.width) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      dots.forEach(([lon, lat]) => {
+        const [x, y] = project(lon, lat);
+        ctx.beginPath(); ctx.arc(x, y, 1.2, 0, Math.PI * 2);
+        ctx.fillStyle = MINT; ctx.fill();
+      });
+      connections.forEach(([a, b], i) => {
+        const [x1, y1] = project(cities[a][0], cities[a][1]);
+        const [x2, y2] = project(cities[b][0], cities[b][1]);
+        const mx = (x1+x2)/2, my = (y1+y2)/2 - Math.hypot(x2-x1,y2-y1)*0.25;
+        const t = animProgress[i];
+        ctx.beginPath(); ctx.moveTo(x1,y1); ctx.quadraticCurveTo(mx,my,x2,y2);
+        ctx.strokeStyle = 'rgba(122,226,207,0.15)'; ctx.lineWidth = 0.8; ctx.stroke();
+        const ax = (1-t)*(1-t)*x1+2*(1-t)*t*mx+t*t*x2;
+        const ay = (1-t)*(1-t)*y1+2*(1-t)*t*my+t*t*y2;
+        ctx.beginPath(); ctx.arc(ax, ay, 2.5, 0, Math.PI*2);
+        ctx.fillStyle = MINT; ctx.fill();
+      });
+      cities.forEach(([lon, lat]) => {
+        const [x, y] = project(lon, lat);
+        ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI*2); ctx.fillStyle = MINT; ctx.fill();
+        ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI*2);
+        ctx.strokeStyle = 'rgba(122,226,207,0.4)'; ctx.lineWidth = 1; ctx.stroke();
+      });
+    }
+
+    function animate() {
+      animProgress = animProgress.map(p => (p + 0.003) % 1);
+      draw(); requestAnimationFrame(animate);
+    }
+    animate();
+  })();
+
+
+  const cards = document.querySelectorAll('.proj-card');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), 80 * (Array.from(cards).indexOf(e.target)));
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  cards.forEach(c => obs.observe(c));
+
+  // ── MODAL ──
+  function openModal(id) {
+    document.getElementById(id).style.display = 'block';
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(id) {
+    document.getElementById(id).style.display = 'none';
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      ['m1','m2','m3','m4'].forEach(id => closeModal(id));
+    }
+  });
+
+  // ── RISK ITEM ACCORDION ──
+  document.querySelectorAll('.m-risk-head').forEach(head => {
+    head.addEventListener('click', () => {
+      const item = head.closest('.m-risk-item');
+      item.classList.toggle('open');
+    });
+  });
+
+  // ── WORKFLOW TABS ──
+  function switchWf(mode) {
+    document.querySelectorAll('.wf-diagram').forEach(d => d.classList.remove('active'));
+    document.querySelectorAll('.wf-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('wf-' + mode).classList.add('active');
+    document.querySelectorAll('.wf-tab').forEach(t => {
+      if (t.classList.contains(mode)) t.classList.add('active');
+    });
+  }
+
+  // ── GED WORKFLOW TABS ──
+  function switchGed(mode) {
+    document.getElementById('ged-before').style.display = mode === 'before' ? 'block' : 'none';
+    document.getElementById('ged-after').style.display  = mode === 'after'  ? 'block' : 'none';
+    document.querySelectorAll('[onclick^="switchGed"]').forEach(t => {
+      t.classList.toggle('active', (mode === 'before' && t.classList.contains('as-is')) || (mode === 'after' && t.classList.contains('to-be')));
+    });
+  }
+
+
+</script>
+</body>
+</html>
